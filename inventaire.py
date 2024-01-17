@@ -47,9 +47,10 @@ nb_tous_produits = []
 produits = csv_reader(file='Inventaire.csv', row_number=0)
 supposed_nb_produits = csv_reader(file='Inventaire.csv', row_number=2)
 nb_produits_par_lots = csv_reader(file='Inventaire.csv', row_number=3)
+ifls_produits_promocash = csv_reader(file='Inventaire.csv', row_number=4)
 for name in produits:
     nb_tous_produits.append(recup_produit_par_nom(name))
-csv_writer('Inventaire.csv', [(p, ntp, snp, nppl) for p, ntp, snp, nppl in zip(produits, nb_tous_produits, supposed_nb_produits, nb_produits_par_lots)])
+csv_writer('Inventaire.csv', [(p, ntp, snp, nppl, ipp) for p, ntp, snp, nppl, ipp in zip(produits, nb_tous_produits, supposed_nb_produits, nb_produits_par_lots, ifls_produits_promocash)])
 
 
 #sleep(100)
