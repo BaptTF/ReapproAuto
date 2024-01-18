@@ -2,3 +2,5 @@ venv
 config.py
 Course*.csv
 __pycache__
+Prix.csv
+ProduitACacher.csv
