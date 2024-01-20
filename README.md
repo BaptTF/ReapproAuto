@@ -50,7 +50,7 @@ Cette étape génére un csv Prix.csv qui contient tous les produits avec le nom
 
 ### Question intermédiaire: Voulez-vous remettre le stock maximal pour course_manuelle ?
 
-Cette étape intermédiare présente dans le fichier **CacherProduits.py** est là pour remettre le fichier Course_manuelle.csv avec le nombre maximum possible en remplaçant le fichier Course_manuelle.csv par le fichier Course_manuelle_stock_max.csv
+Cette étape intermédiare présente dans le fichier **remiseStockManuelle.py** est là pour remettre le fichier Course_manuelle.csv avec le nombre maximum possible en remplaçant le fichier Course_manuelle.csv par le fichier Course_manuelle_stock_max.csv
 
 ### 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
 
