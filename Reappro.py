@@ -54,7 +54,7 @@ def reappro(PASSWORD):
         driver.find_element(By.XPATH, "//button[contains(.,'Ajouter')]").click()
         difference = abs(float(vieux_prix) - float(prix[row]))
         if difference >= marge:
-            produit_a_cacher.append((produits[row], difference))
+            produit_a_cacher.append((produits[row], round(difference, 2)))
 
     for row in range(len(produits)):
         ajout_produit(row, 0.05)

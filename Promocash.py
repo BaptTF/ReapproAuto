@@ -66,8 +66,42 @@ def promocash(PASSWORD_PROMOCASH):
             ajout_produit(row)
         else:
             print(f"Le produit {produits[row]} n'a pas été ajouté car il n'est pas dans la base de données")
-    driver.get("https://nancy.promocash.com/cmdEtape1.php")
+
     csv_writer('Prix.csv', prix)
+
+
+    ##########################
+    # Partie Course_manuelle #
+    ##########################
+
+
+    produits = csv_reader('Course_manuelle.csv', row_number=0)
+    nb_produits = csv_reader('Course_manuelle.csv', row_number=1)
+    supposed_nb_produits = csv_reader('Course_manuelle.csv', row_number=2)
+    ifls_produits_promocash = csv_reader('Course_manuelle.csv', row_number=3)
+    prix_manuelle = []
+    def ajout_produit(row):
+        driver.find_element(By.ID, "searchString").send_keys(ifls_produits_promocash[row])
+        driver.find_element(By.ID, "searchString").send_keys(Keys.ENTER)
+        nb_de_lots_int = int(supposed_nb_produits[row]) -  int(nb_produits[row])
+        while nb_de_lots_int > 1:
+            driver.find_element(By.XPATH, "//a[@class='pictoPlus']").click()
+            nb_de_lots_int -= 1
+        unit_prix = driver.find_element(By.XPATH, "//span[@class='unit']").text
+        deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
+        prix_manuelle.append((produits[row],int(supposed_nb_produits[row]) -  int(nb_produits[row]), float(unit_prix + "." + deci_prix)))
+        driver.find_element(By.XPATH, "//input[@value='Commander']").click()
+        driver.find_element(By.ID, "searchString").clear()
+
+    for row in range(len(produits)):
+        if ifls_produits_promocash[row] != '' and int(supposed_nb_produits[row]) -  int(nb_produits[row]) > 0:
+            ajout_produit(row)
+    if prix_manuelle != []:
+        prix_manuelle.append(("Total HT",sum([x[2] for x in prix_manuelle])))
+    else:
+        prix_manuelle.append(("Total HT",0))
+    csv_writer('Prix_manuelle.csv', prix_manuelle)
+    driver.get("https://nancy.promocash.com/cmdEtape1.php")
 
 if __name__ == '__main__':
     promocash(getpass('Password Promocash:'))

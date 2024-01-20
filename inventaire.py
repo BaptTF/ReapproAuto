@@ -34,8 +34,12 @@ def inventaire(PASSWORD):
     # Récupération des produits par nom
     def recup_produit_par_nom(name):
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").send_keys(name)
+        #sleep(1)
         try:
             nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
+            if nb_produit == "0":
+                sleep(1)
+                nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
         except NoSuchElementException:
             nb_produit = "Produit non trouvé"
         print(name, nb_produit)

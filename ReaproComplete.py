@@ -4,6 +4,7 @@ from Course import creation_de_la_liste_de_course
 from Promocash import promocash
 from Reappro import reappro
 from CacherProduits import cacher_produit
+from remiseStockManuelle import stock_max
 
 # Get the password only once
 PASSWORD = getpass('Password Google:')
@@ -13,7 +14,7 @@ inventaire(PASSWORD)
 
 # 2 EME ETAPE: CALCULER LES COURSES A FAIRE
 if input("Voulez-vous continuer à l'étape suivante ?") == 'y':
-    creation_de_la_liste_de_course(75)
+    creation_de_la_liste_de_course(62.5)
 else:
     exit()
 
@@ -23,7 +24,11 @@ if input("Voulez-vous continuer à l'étape suivante ?") == 'y':
     promocash(PASSWORD_PROMOCASH)
 else:
     exit()
-
+# Question intermédiaire: Voulez-vous remettre le stock maximal pour course_manuelle ?
+if input("Voulez-vous remettre le stock maximal pour course_manuelle ?") == 'y':
+    stock_max()
+else:
+    print("Stock manuelle non modifié")
 # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
 if input("Voulez-vous continuer à l'étape suivante ?") == 'y':
     reappro(PASSWORD)

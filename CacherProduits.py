@@ -32,6 +32,7 @@ def cacher_produit(PASSWORD):
     # Récupération des produits par nom
     def cacher_produit_par_nom(name):
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").send_keys(name)
+        sleep(0.1)
         select_element = driver.find_element(By.XPATH, "//td[4]/div/select")
         select = Select(select_element)
         select.select_by_index(1)
