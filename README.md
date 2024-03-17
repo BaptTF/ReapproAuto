@@ -75,14 +75,14 @@ SEUIL_COURSE=62.5
 #### Explication de SEUIL_COURSE
 
 SEUIL_COURSE est une constante qui sert à calculer les course à partir de de nombre de produit dans le bar et le nombre de produit par lot:
-Un example sera plus parlant:
-Si on veut dans le bar 48 Coca Cola (montant optimal) et que dans le bar on a 47 Coca Cola on ne veut pas racheter 24 Coca en plus donc il faut un seuil à partir duquel on décide d'acheter le lot
-Le seuil est en pourcentage du nombre de produit par lots
-Le seuil par défaut est de 62.5 % en reprenant l'exemple au-dessus
-Il faut qu'il n'y 39 Coca dans le bar car 24 * 0.625 = 15 et 24 + 15 = 39
-Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour en acheté un nouveau, example: 24 Coca pour 100 à SEUIL_COURSE
-Et si le seuil est de 0 % alors on achète dès qu'il manque un produit dans le cf le premier example
-Le seuil de 62,5 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer
+Un example sera plus parlant: <br>
+Si on veut dans le bar 48 Coca Cola (montant optimal) et que dans le bar on a 47 Coca Cola on ne veut pas racheter 23 Coca en plus donc il faut un seuil à partir duquel on décide d'acheter le lot <br>
+Le seuil est en pourcentage du nombre de produit par lots <br>
+Le seuil par défaut est de 62.5 % en reprenant l'exemple au-dessus <br>
+Il faut qu'il n'y 39 Coca dans le bar car 24 * 0.625 = 15 et 24 + 15 = 39 <br>
+Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour en acheté un nouveau, example: 24 Coca pour 100 à SEUIL_COURSE <br>
+Et si le seuil est de 0 % alors on achète dès qu'il manque un produit dans le bar cf le premier example <br>
+Le seuil de 62,5 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer 
 
 #### Explication de Inventaire_(Promocash/Auchan).csv
 
