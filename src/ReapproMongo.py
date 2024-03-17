@@ -9,10 +9,12 @@ from bson.int64 import Int64
 from Recalcul_prix_centimes import recalcul_prix_centimes
 
 def reappro_mongo(client, email, magasin):
+    print("Attention, cette fonction est dangereuse, elle modifie la base de donnée du bar")
     security = input("La réappro ce base sur le fichier Prix.csv êtes vous sûre que c'est la bonne réappro? (y/n)")
     if security != "y":
         print("Reappro annulé")
         exit()
+    print("Si tu utilise cette fonctionnalité c'est que tu es sûr de ce que tu fais, sinon tu risque de tout casser, tu es sûr de ce que tu fais?")
     second_security = input("Je suis responsable de ma reappro, je suis sûr de ce que je fais (y/n)")
     if second_security != "y":
         print("Reappro annulé")

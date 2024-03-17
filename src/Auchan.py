@@ -9,7 +9,7 @@ from time import sleep
 from dotenv import load_dotenv
 from os import getenv
 
-def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN):
+def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     # Récupération des courses à faire
     produits = csv_reader(file='Course.csv', row_number=0)
     nb_de_lots_a_acheter = csv_reader(file='Course.csv', row_number=1)
@@ -19,10 +19,16 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN):
     ref_produits_auchan = csv_reader(file='Course.csv', row_number=5)
 
     # Création du chrome en changeant sa taille parce que sinon le login marche pas
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--window-size=1620,1000")
-    opts.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=opts)
+    if WEB_BROWSER == "chrome":
+        opts = webdriver.ChromeOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.add_experimental_option("detach", True)
+        driver = webdriver.Chrome(options=opts)
+    elif WEB_BROWSER == "firefox":
+        opts = webdriver.FirefoxOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.set_preference('detach', True)
+        driver = webdriver.Firefox(options=opts)
     driver.implicitly_wait(1)
 
     # Authentification Auchan
@@ -64,4 +70,4 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN):
 
 if __name__ == '__main__':
     load_dotenv()
-    auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"))
+    auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"), getenv("WEB_BROWSER"))

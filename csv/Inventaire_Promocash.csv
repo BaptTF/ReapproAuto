@@ -3,7 +3,7 @@ Coca Cherry,28,62,24,418172
 Coca Cola Zero,47,48,24,418171
 Lipton Peche,0,48,24,471756
 Fuzetea 33 CL,33,48,24,054379
-Oasis Tropical,0,48,24,945003
+Oasis Tropical,0,48,24,187397
 Oasis PCF,51,62,24,945087
 Fanta Orange,32,48,24,418061
 Fanta Citron,45,48,24,422726
@@ -29,6 +29,7 @@ Jus Pomme,0,12,12,892556
 Jus Raisin,10,12,12,892628
 Jus tomate,0,12,12,892629
 Jus Poire,0,0,12,892540
+Jus Pamplemousse,0,12,12,
 Arizona Mucho Mango,5,6,6,611479
 Arizona Green Tea,4,6,6,609713
 Arizona Fruit Punch,16,6,6,611243
@@ -37,7 +38,7 @@ Arizona Pêche,16,6,6,609058
 Arizona PomeGranate,4,6,6,609953
 Dada Litchi,0,0,6,
 Dada Cerise,0,10,6,
-Volvic Fraise,0,10,6,826046
+Volvic Fraise,0,10,24,826046
 Canada dry,54,12,6,826746
 Monster Mango Loco,26,12,12,421904
 Monster Pipeline Punch,10,12,12,368789
@@ -47,3 +48,5 @@ Monster Energy,30,48,24,394647
 Monster Ultra Gold,15,12,12,815429
 Capri-Sun,20,40,10,778766
 Cacolac,0,12,24,599300
+Sprite,0,24,24,905216
+Jus Pamplemousse,0,12,12,892552

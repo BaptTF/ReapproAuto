@@ -8,17 +8,26 @@ sudo apt install -y python3-venv;
 ```bash
 source Install.sh
 ```
-Puis REMPLISSER le fichier .env 
+Puis REMPLISSER le fichier .env avec les information nécessaire pour votre réappro
+Obligatoire à remplir: MONGO_MDP, MONGO_PEM
+Pour Promocash: NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER
+Pour Auchan: IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER
+Pour faire une réappro dans le bar: EMAIL, WEB_BROWSER
 ```
 MONGO_MDP= <METTEZ ICI LE MDP DE LA BASE DE DONNÉES>
 MONGO_PEM= <METTEZ LE CHEMIN ABSOLUE DU FICHIER PEM POUR SE CONNECTER A LA DB>
-EMAIL= <METTEZ VOTRE ADDRESSE EMAIL AVEC @telecomancy.net>
+NUMERO_CARTE_PROMOCASH= <METTEZ VOTRE NUMERO DE CARTE PROMOCASH>
 PASSWORD_PROMOCASH= <METTEZ LE MDP DU PROMOCASH>
+IDENTIFIANT_AUCHAN= <METTEZ LE IDF DE AUCHAN>
+PASSWORD_AUCHAN= <METTEZ LE PASSWORD AUCHAN>
+EMAIL= <METTEZ VOTRE ADDRESSE EMAIL AVEC @telecomancy.net>
+WEB_BROWSER= <METTEZ VOTRE NAVIGATEUR (chrome/firefox)>
 ```
 Puis REMPLISSER le fichier csv/Inventaire_Promocash.csv ou csv/Inventaire_Auchan.csv selon le réappro que vous voulez faire
 ```bash
 source Start.sh
 ```
+Si vous êtes curieux de ce qu'est SEUIL_COURSE allez à la partie configuration
 
 ## PRESENTATION
 Application Python qui utilise selenium et se connecte à la base de données pour faire le réapprovisionnement du bar
@@ -52,10 +61,31 @@ Puis REMPLISSER le fichier .env
 ```
 MONGO_MDP= <METTEZ ICI LE MDP DE LA BASE DE DONNÉES>
 MONGO_PEM= <METTEZ LE CHEMIN ABSOLUE DU FICHIER PEM POUR SE CONNECTER A LA DB>
-EMAIL= <METTEZ VOTRE ADDRESSE EMAIL AVEC @telecomancy.net>
+NUMERO_CARTE_PROMOCASH= <METTEZ VOTRE NUMERO DE CARTE PROMOCASH>
 PASSWORD_PROMOCASH= <METTEZ LE MDP DU PROMOCASH>
+IDENTIFIANT_AUCHAN= <METTEZ LE IDF DE AUCHAN>
+PASSWORD_AUCHAN= <METTEZ LE PASSWORD AUCHAN>
+EMAIL= <METTEZ VOTRE ADDRESSE EMAIL AVEC @telecomancy.net>
+WEB_BROWSER= <METTEZ VOTRE NAVIGATEUR (chrome/firefox)>
+SEUIL_COURSE=62.5
 ```
-Puis REMPLISSER le fichier csv/Inventaire.csv
+
+##### Explication de SEUIL_COURSE
+
+SEUIL_COURSE est une constante qui sert à calculer les course à partir de de nombre de produit dans le bar et le nombre de produit par lot:
+Un example sera plus parlant:
+Si on veut dans le bar 48 Coca Cola (montant optimal) et que dans le bar on a 47 Coca Cola on ne veut pas racheter 24 Coca en plus donc il faut un seuil à partir duquel on décide d'acheter le lot
+Le seuil est en pourcentage du nombre de produit par lots
+Le seuil par défaut est de 62.5 % en reprenant l'exemple au-dessus
+Il faut qu'il n'y 39 Coca dans le bar car 24 * 0.625 = 15 et 24 + 15 = 39
+Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour en acheté un nouveau, example: 24 Coca pour 100 à SEUIL_COURSE
+Et si le seuil est de 0 % alors on achète dès qu'il manque un produit dans le cf le premier example
+Le seuil de 62,5 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer
+
+##### Explication de Inventaire_(Promocash/Auchan).csv
+
+Le fichier csv/Inventaire_(Promocash/Auchan).csv
+
 Comme l'example ci dessous (nom produit, nombre dans le bar, nombre optimal dans le bar, nombre de produit par lot, moyen de chercher sur le drive)
 ```csv
 Coca Cola,0,0,24,525199
@@ -68,7 +98,7 @@ Tous ce script fonctionne avec selenium avec un navigateur il est donc logique q
 
 ### 1 ERE ETAPE: FAIRE L'INVENTAIRE
 
-La première étape est présente dans le fichier **inventaire.py** consiste à récupérer la quantité de chaque produit présent dans la première colonne du csv Inventaire.csv
+La première étape est présente dans le fichier **inventaireMongo.py** consiste à récupérer la quantité de chaque produit présent dans la première colonne du csv Inventaire.csv
 
 ### 2 EME ETAPE: CALCULER LES COURSES A FAIRE
 
@@ -80,12 +110,16 @@ La troisième étape est présente dans le fichier **Promocash.py** consiste à 
 
 Cette étape génére un csv Prix.csv qui contient tous les produits avec le nombre de produits achetés, le nombre de produits par lots, et le prix pour chaque lots.
 
-### Question intermédiaire: Voulez-vous remettre le stock maximal pour course_manuelle ?
+##### Question intermédiaire pour Promocash: Voulez-vous remettre le stock maximal pour course_manuelle ?
 
 Cette étape intermédiare présente dans le fichier **remiseStockManuelle.py** est là pour remettre le fichier Course_manuelle.csv avec le nombre maximum possible en remplaçant le fichier Course_manuelle.csv par le fichier Course_manuelle_stock_max.csv
 
 ### 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
 
-La quatrième étape est présente dans le fichier **Reappro.py** consiste à prendre tous les éléments dans le fichier Prix.csv pour remplir la réappro dans le bar. Cette étape récupérer aussi les anciens prix et les compare avec les nouveaux prix qu'il rentre.
+La réppro consiste à prendre tous les éléments dans le fichier Prix.csv pour remplir la réappro dans le bar.
 
-Cette étape générer un fichier ProduitACacher.csv qui contients les produits qui ont changer de prix ainsi que la difference entre le nouveau prix et l'ancien prix.
+Il y a 2 possibilités:
+Soit la réappro avec le site du bar en utilisant Selenium Avantage: + plus de la réappro rentré Inconvenient: Utilise le navigateur pour rentrée la réappro
+Présente dans le fichier **Reappro.py** 
+Cette possibilité est un fonctionnalité expérimental n'ayant était testé que en dans un base de données local il est donc déconseiller de l'utiliser tant qu'elle n'as pas était testé correctement.
+Soit la réppro en modifiant directement la base de données: Avantage: + rapide, +sûre qu'un navitageur Inconveniant: Si le programme bug au milieu c'est la merde notamment parce qu'on sait pas ce que ça a rentré.

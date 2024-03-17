@@ -10,7 +10,7 @@ from csvReader import csv_reader
 from dotenv import load_dotenv
 from os import getenv
 
-def reappro(EMAIL, PASSWORD, magasin):
+def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     if magasin == "p":
         input_price = 6
     elif magasin == "a":
@@ -22,10 +22,16 @@ def reappro(EMAIL, PASSWORD, magasin):
     prix = csv_reader(file='Prix.csv', row_number=3)
 
     # Création du chrome en changeant sa taille
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--window-size=1620,1000")
-    opts.add_experimental_option("detach", True)
-    driver = webdriver.Firefox(options=opts)
+    if WEB_BROWSER == "chrome":
+        opts = webdriver.ChromeOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.add_experimental_option("detach", True)
+        driver = webdriver.Chrome(options=opts)
+    elif WEB_BROWSER == "firefox":
+        opts = webdriver.FirefoxOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.set_preference('detach', True)
+        driver = webdriver.Firefox(options=opts)
     driver.implicitly_wait(1)
 
     # Authentification Google
@@ -65,4 +71,4 @@ def reappro(EMAIL, PASSWORD, magasin):
 if __name__ == '__main__':
     PASSWORD = getpass('Password Google:')
     load_dotenv()
-    reappro(getenv("EMAIL"), PASSWORD, "p")
+    reappro(getenv("EMAIL"), PASSWORD, getenv("WEB_BROWSER"),"p")

@@ -29,22 +29,22 @@ if magasin != 'r':
 
     # 2 EME ETAPE: CALCULER LES COURSES A FAIRE
     if magasin == 'p':
-        creation_de_la_liste_de_course(62.5, file)
+        creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
     else:
-        creation_de_la_liste_de_course(62.5, file)
+        creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
     print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
 
     if magasin == 'p':
         # 3 EME ETAPE: ALLER SUR PROMOCASH
         if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':
-            promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"))
+            promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
             print("Commande faite sur Promocash et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
         else:
             exit()
     else:
         # 3 EME ETAPE: ALLER SUR AUCHAN
         if input("Voulez-vous commander sur Auchan (y/n) ?") == 'y':
-            auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"))
+            auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"), getenv("WEB_BROWSER"))
             print("Commande faite sur Auchan et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
         else:
             exit()
@@ -63,12 +63,13 @@ else:
     if ans == "bar":
         if input("Etes-vous sûre de vouloir faire la reappro avec le site du bar? (y/n)") == 'y':
             # Get the password for the Google account
-            PASSWORD = getpass('Password Google:')
-            reappro(getenv("EMAIL"), PASSWORD, magasin)
+            PASSWORD = getpass('Password Google de votre compte TN.net:')
+            reappro(getenv("EMAIL"), PASSWORD, getenv("WEB_BROWSER"), magasin)
             print("Reappro fait sur le site du bar")
         else:
             exit()
     elif ans == "bd":
+        print("Cette fonctionnalité est expérimentale et peut corrompre la base de données, veuillez vérifier les données avant de continuer")
         if input("Etes-vous sûre de vouloir faire la reappro via la base données directement (y/n) ?") == 'y':
             reappro_mongo(client, getenv("EMAIL"), magasin)
             print("Reappro fait via la base de données directement")

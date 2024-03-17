@@ -9,7 +9,7 @@ from time import sleep
 from dotenv import load_dotenv
 from os import getenv
 
-def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH):
+def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     # Récupération des courses à faire
     produits = csv_reader(file='Course.csv', row_number=0)
     nb_de_lots_a_acheter = csv_reader(file='Course.csv', row_number=1)
@@ -19,10 +19,16 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH):
     ifls_produits_promocash = csv_reader(file='Course.csv', row_number=5)
 
     # Création du chrome en changeant sa taille parce que sinon le login marche pas
-    opts = webdriver.ChromeOptions()
-    opts.add_argument("--window-size=1620,1000")
-    opts.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=opts)
+    if WEB_BROWSER == "chrome":
+        opts = webdriver.ChromeOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.add_experimental_option("detach", True)
+        driver = webdriver.Chrome(options=opts)
+    elif WEB_BROWSER == "firefox":
+        opts = webdriver.FirefoxOptions()
+        opts.add_argument("--window-size=1620,1000")
+        opts.set_preference('detach', True)
+        driver = webdriver.Firefox(options=opts)
     driver.implicitly_wait(1)
 
 
@@ -105,7 +111,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH):
 
 if __name__ == '__main__':
     load_dotenv()
-    promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"))
+    promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
 #ajout_produit(0) 
 # for row in range(len(produits)):
 #     ajout_produit(row)
