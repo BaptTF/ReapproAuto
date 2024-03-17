@@ -83,7 +83,7 @@ Le seuil est en pourcentage du nombre de produit par lots <br>
 
 Le seuil par défaut est de 62.5 % en reprenant l'exemple au-dessus <br>
 
-Il faut qu'il n'y 39 Coca dans le bar car 24 * 0.625 = 15 et 24 + 15 = 39 <br>
+Il faut qu'il y ait 39 Coca dans le bar pour déclencher l'achat car 24 * 0.625 = 15 et 24 + 15 = 39 <br>
 
 Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour en acheté un nouveau, example: 24 Coca pour 100 à SEUIL_COURSE <br>
 
