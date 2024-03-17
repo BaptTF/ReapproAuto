@@ -5,3 +5,7 @@ __pycache__
 Prix*.csv
 ProduitACacher.csv
 Inventaire.csv
+Inventaire_modif.csv
+ProduitARecalculer.csv
+.env
+.vscode

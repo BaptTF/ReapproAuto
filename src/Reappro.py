@@ -7,10 +7,14 @@ from selenium.webdriver.support.select import Select
 from getpass import getpass
 from time import sleep
 from csvReader import csv_reader
-from csvWriter import csv_writer
-from config import EMAIL
+from dotenv import load_dotenv
+from os import getenv
 
-def reappro(PASSWORD):
+def reappro(EMAIL, PASSWORD, magasin):
+    if magasin == "p":
+        input_price = 6
+    elif magasin == "a":
+        input_price = 8
     # Récupération des prix
     produits = csv_reader(file='Prix.csv', row_number=0)
     nb_de_lots_acheter = csv_reader(file='Prix.csv', row_number=1)
@@ -21,7 +25,7 @@ def reappro(PASSWORD):
     opts = webdriver.ChromeOptions()
     opts.add_argument("--window-size=1620,1000")
     opts.add_experimental_option("detach", True)
-    driver = webdriver.Chrome(options=opts)
+    driver = webdriver.Firefox(options=opts)
     driver.implicitly_wait(1)
 
     # Authentification Google
@@ -36,32 +40,29 @@ def reappro(PASSWORD):
     sleep(2)
 
     # Aller sur la page des Réapprovisionnements
-    produit_a_cacher = []
     driver.get("https://bar.telecomnancy.net/panel/products/reappro")
     def ajout_produit(row, marge):
+        sleep(0.5)
         driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row])
+        sleep(0.1)
         driver.find_element(By.XPATH, "//div[2]/button").click()
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(Keys.BACKSPACE)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(nb_de_lots_acheter[row])
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de produits par lots']").send_keys(Keys.BACKSPACE)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de produits par lots']").send_keys(nb_produits_par_lots[row])
         driver.find_element(By.XPATH, "//td[6]/div/input").click()
-        vieux_prix = driver.find_element(By.XPATH, "//td[6]/div/input").get_attribute("placeholder")[:-2]
+        sleep(1)
         select_element = driver.find_element(By.XPATH, "//td[7]/div/select")
         select = Select(select_element)
         select.select_by_index(1)
-        driver.find_element(By.XPATH, "//td[6]/div/input").send_keys(prix[row])
+        driver.find_element(By.XPATH, f"//td[{input_price}]/div/input").send_keys(prix[row])
         driver.find_element(By.XPATH, "//button[contains(.,'Ajouter')]").click()
-        difference = abs(float(vieux_prix) - float(prix[row]))
-        if difference >= marge:
-            produit_a_cacher.append((produits[row], round(difference, 2)))
 
     for row in range(len(produits)):
         ajout_produit(row, 0.05)
 
-    # Cacher les produits qui ont changé de prix
-    csv_writer("ProduitACacher.csv", produit_a_cacher)
 
 if __name__ == '__main__':
     PASSWORD = getpass('Password Google:')
-    reappro(PASSWORD)
+    load_dotenv()
+    reappro(getenv("EMAIL"), PASSWORD, "p")

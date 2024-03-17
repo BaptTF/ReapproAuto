@@ -1,18 +1,20 @@
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.select import Select
 from time import sleep
 from csvReader import csv_reader
-from csvWriter import csv_writer
-from config import EMAIL
 from getpass import getpass
+from test.Recalcul_prix import recalcul_prix
+from dotenv import load_dotenv
+from os import getenv
 
-# Get the password
-def inventaire(PASSWORD):
+def RecalculProduits(EMAIL, PASSWORD):
     # Créer une instance du navigateur Chrome
-    driver = webdriver.Chrome()
+    opts = webdriver.ChromeOptions()
+    opts.add_argument("--window-size=1620,1000")
+    driver = webdriver.Chrome(options=opts)
     driver.implicitly_wait(1)
 
     # Passez l'authentification Google
@@ -32,27 +34,27 @@ def inventaire(PASSWORD):
     driver.get("https://bar.telecomnancy.net/admin/produits")
 
     # Récupération des produits par nom
-    def recup_produit_par_nom(name):
+    def recalcul_produit_par_nom(name, prix):
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").send_keys(name)
-        #sleep(1)
-        try:
-            nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
-            if nb_produit == "0":
-                sleep(1)
-                nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
-        except NoSuchElementException:
-            nb_produit = "Produit non trouvé"
-        print(name, nb_produit)
+        sleep(0.1)
+        select_element = driver.find_element(By.XPATH, "//th[8]/select")
+        select = Select(select_element)
+        WebDriverWait(driver, 2).until(EC.visibility_of_element_located((By.XPATH, "//th[8]/select")))
+        for i in range(6):
+            select.select_by_index(i)
+            driver.find_element(By.ID, "price").send_keys(list(recalcul_prix(float(prix)).values())[i])
+        select_element = driver.find_element(By.XPATH, "//td[4]/div/select")
+        select = Select(select_element)
+        sleep(0.1)
+        select.select_by_index(0)
+        print(name)
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").clear()
-        return nb_produit
-    nb_tous_produits = []
-    produits = csv_reader(file='Inventaire.csv', row_number=0)
-    supposed_nb_produits = csv_reader(file='Inventaire.csv', row_number=2)
-    nb_produits_par_lots = csv_reader(file='Inventaire.csv', row_number=3)
-    ifls_produits_promocash = csv_reader(file='Inventaire.csv', row_number=4)
-    for name in produits:
-        nb_tous_produits.append(recup_produit_par_nom(name))
-    csv_writer('Inventaire.csv', [(p, ntp, snp, nppl, ipp) for p, ntp, snp, nppl, ipp in zip(produits, nb_tous_produits, supposed_nb_produits, nb_produits_par_lots, ifls_produits_promocash)])
+
+    produits = csv_reader(file='ProduitARecalculer.csv', row_number=0)
+    prix = csv_reader(file='ProduitARecalculer.csv', row_number=1)
+    for name, prix in zip(produits,prix):
+        recalcul_produit_par_nom(name, prix)
 
 if __name__ == '__main__':
-    inventaire(getpass('Password:'))
+    load_dotenv()
+    RecalculProduits(getenv("EMAIL"), getpass('Password Google:'))

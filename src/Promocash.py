@@ -3,13 +3,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from getpass import getpass
 from csvReader import csv_reader
 from csvWriter import csv_writer
 from time import sleep
-from config import NUMERO_CARTE_PROMOCASH
+from dotenv import load_dotenv
+from os import getenv
 
-def promocash(PASSWORD_PROMOCASH):
+def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH):
     # Récupération des courses à faire
     produits = csv_reader(file='Course.csv', row_number=0)
     nb_de_lots_a_acheter = csv_reader(file='Course.csv', row_number=1)
@@ -104,7 +104,8 @@ def promocash(PASSWORD_PROMOCASH):
     driver.get("https://nancy.promocash.com/cmdEtape1.php")
 
 if __name__ == '__main__':
-    promocash(getpass('Password Promocash:'))
+    load_dotenv()
+    promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"))
 #ajout_produit(0) 
 # for row in range(len(produits)):
 #     ajout_produit(row)

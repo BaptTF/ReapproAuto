@@ -1,0 +1,78 @@
+from getpass import getpass
+from inventaireMongo import inventaire_mongo
+from Course import creation_de_la_liste_de_course
+from Promocash import promocash
+from Auchan import auchan
+from Reappro import reappro
+from ReapproMongo import reappro_mongo
+from remiseStockManuelle import stock_max
+from pymongo import MongoClient
+from os import getenv
+from dotenv import load_dotenv
+
+# Load the environment variables
+load_dotenv()
+
+# 1 ERE ETAPE: FAIRE L'INVENTAIRE
+# Create a MongoClient object and specify the connection URL
+client = MongoClient(f"mongodb://bar:{getenv('MONGO_MDP')}@mongo.telecomnancy.net:443/?authMechanism=DEFAULT&authSource=bar&directConnection=true&tls=true&tlsCertificateKeyFile={getenv('MONGO_PEM')}")
+magasin = input("Course pour Promocash ou pour Auchan ou passez à l'étape de la réappro si vous avez déjà fait vos courses (p/a/r) ?")
+if magasin != 'r':
+    file = "Inventaire_Promocash.csv" if magasin == 'p' else "Inventaire_Auchan.csv"
+    last_row = "ifls_produits_promocash" if magasin == 'p' else "ref_produits_auchan"
+    if magasin == 'p':
+        inventaire_mongo(client, file)
+    else:
+        inventaire_mongo(client, file)
+
+    print(f"Inventaire fait dans le fichier {file} (nom_produit, amount_left, optimal_amount, nb_produits_par_lots, {last_row}")
+
+    # 2 EME ETAPE: CALCULER LES COURSES A FAIRE
+    if magasin == 'p':
+        creation_de_la_liste_de_course(62.5, file)
+    else:
+        creation_de_la_liste_de_course(62.5, file)
+    print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
+
+    if magasin == 'p':
+        # 3 EME ETAPE: ALLER SUR PROMOCASH
+        if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':
+            promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"))
+            print("Commande faite sur Promocash et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
+        else:
+            exit()
+    else:
+        # 3 EME ETAPE: ALLER SUR AUCHAN
+        if input("Voulez-vous commander sur Auchan (y/n) ?") == 'y':
+            auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"))
+            print("Commande faite sur Auchan et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
+        else:
+            exit()
+
+    if magasin == 'p':
+        # Question intermédiaire: Voulez-vous remettre le stock maximal pour course_manuelle ?
+        if input("Voulez-vous remettre le stock maximal pour course_manuelle (y/n) ?") == 'y':
+            stock_max()
+            print("Stock manuelle remis à jour")
+        else:
+            print("Stock manuelle non modifié")
+else:
+    # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
+    magasin = input("Voulez-vous faire la reappro pour Promocash ou pour Auchan (p/a) ?")
+    ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/bd)" ) == "bar"
+    if ans == "bar":
+        if input("Etes-vous sûre de vouloir faire la reappro avec le site du bar? (y/n)") == 'y':
+            # Get the password for the Google account
+            PASSWORD = getpass('Password Google:')
+            reappro(getenv("EMAIL"), PASSWORD, magasin)
+            print("Reappro fait sur le site du bar")
+        else:
+            exit()
+    elif ans == "bd":
+        if input("Etes-vous sûre de vouloir faire la reappro via la base données directement (y/n) ?") == 'y':
+            reappro_mongo(client, getenv("EMAIL"), magasin)
+            print("Reappro fait via la base de données directement")
+        else:
+            exit()
+    # Close the connection when you're done
+client.close()

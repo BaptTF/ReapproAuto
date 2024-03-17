@@ -1,4 +1,5 @@
 import csv
+from pathlib import Path
 
 
 def csv_reader(file, row_number):
@@ -6,7 +7,7 @@ def csv_reader(file, row_number):
     Read a csv file
     """
     produits = []
-    with open(file, newline='') as csvfile:
+    with open(Path("csv") / file, newline='') as csvfile:
         csv_produits = csv.reader(csvfile, delimiter=',', quotechar='|')
         for row in csv_produits:
             produits.append(row[row_number])

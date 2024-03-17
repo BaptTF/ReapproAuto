@@ -2,12 +2,12 @@ from csvReader import csv_reader
 from csvWriter import csv_writer
 
 # Récupération des produits et de le nombre
-def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots, diff=False):
-    produits = csv_reader(file='Inventaire.csv', row_number=0)
-    nb_produits = csv_reader(file='Inventaire.csv', row_number=1)
-    supposed_nb_produits = csv_reader(file='Inventaire.csv', row_number=2)
-    nb_produits_par_lots = csv_reader(file='Inventaire.csv', row_number=3)
-    ifls_produits_promocash = csv_reader(file='Inventaire.csv', row_number=4)
+def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots, file, diff=False):
+    produits = csv_reader(file, row_number=0)
+    nb_produits = csv_reader(file, row_number=1)
+    supposed_nb_produits = csv_reader(file, row_number=2)
+    nb_produits_par_lots = csv_reader(file, row_number=3)
+    ifls_produits_promocash = csv_reader(file, row_number=4)
     #produits = [(p,nb,s) for p,nb,s in zip(produits,nb_produits, supposed_nb_produits)]
 
     course = []

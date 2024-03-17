@@ -1,14 +1,17 @@
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.select import Select
 from time import sleep
 from csvReader import csv_reader
-from config import EMAIL
+from csvWriter import csv_writer
 from getpass import getpass
+from dotenv import load_dotenv
+from os import getenv
 
-def cacher_produit(PASSWORD):
+# Get the password
+def inventaire(EMAIL, PASSWORD):
     # Créer une instance du navigateur Chrome
     driver = webdriver.Chrome()
     driver.implicitly_wait(1)
@@ -30,18 +33,28 @@ def cacher_produit(PASSWORD):
     driver.get("https://bar.telecomnancy.net/admin/produits")
 
     # Récupération des produits par nom
-    def cacher_produit_par_nom(name):
+    def recup_produit_par_nom(name):
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").send_keys(name)
-        sleep(0.1)
-        select_element = driver.find_element(By.XPATH, "//td[4]/div/select")
-        select = Select(select_element)
-        select.select_by_index(1)
-        print(name)
+        #sleep(1)
+        try:
+            nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
+            if nb_produit == "0":
+                sleep(1)
+                nb_produit = driver.find_element(By.XPATH, "//td[5]/div/input").get_attribute("value")
+        except NoSuchElementException:
+            nb_produit = "Produit non trouvé"
+        print(name, nb_produit)
         driver.find_element(By.XPATH, "//input[@placeholder='Rechercher']").clear()
-
-    produits = csv_reader(file='ProduitACacher.csv', row_number=0)
+        return nb_produit
+    nb_tous_produits = []
+    produits = csv_reader(file='Inventaire.csv', row_number=0)
+    supposed_nb_produits = csv_reader(file='Inventaire.csv', row_number=2)
+    nb_produits_par_lots = csv_reader(file='Inventaire.csv', row_number=3)
+    ifls_produits_promocash = csv_reader(file='Inventaire.csv', row_number=4)
     for name in produits:
-        cacher_produit_par_nom(name)
+        nb_tous_produits.append(recup_produit_par_nom(name))
+    csv_writer('Inventaire.csv', [(p, ntp, snp, nppl, ipp) for p, ntp, snp, nppl, ipp in zip(produits, nb_tous_produits, supposed_nb_produits, nb_produits_par_lots, ifls_produits_promocash)])
 
 if __name__ == '__main__':
-    cacher_produit(getpass('Password Google:'))
+    load_dotenv()
+    inventaire(getenv("EMAIL"),getpass('Password:'))
