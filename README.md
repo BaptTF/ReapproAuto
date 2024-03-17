@@ -14,6 +14,7 @@ Obligatoire à remplir: MONGO_MDP, MONGO_PEM
 Pour Promocash: NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER
 Pour Auchan: IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER
 Pour faire une réappro dans le bar: EMAIL, WEB_BROWSER
+
 ```
 MONGO_MDP= <METTEZ ICI LE MDP DE LA BASE DE DONNÉES>
 MONGO_PEM= <METTEZ LE CHEMIN ABSOLUE DU FICHIER PEM POUR SE CONNECTER A LA DB>
@@ -30,7 +31,7 @@ source Start.sh
 ```
 Si vous êtes curieux de ce qu'est SEUIL_COURSE allez à la partie configuration
 
-## PRESENTATION
+## PRESENTATION
 Application Python qui utilise selenium et se connecte à la base de données pour faire le réapprovisionnement du bar
 
 Ce programme automatise la réappro de openBar pour Promocash en plusieurs étapes décrites ci-dessous.
