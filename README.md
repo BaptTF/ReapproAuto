@@ -4,7 +4,7 @@
 Avoir soit Firefox soit Google Chrome si possible installé avec apt parce que j'ai pas testé si ça fonctionne installé avec snap mais probablement pas mdr
 https://doc.ubuntu-fr.org/firefox#installer_firefox_en_deb_classique_au_lieu_de_snap
 ```bash
-sudo apt install -y python3-venv;
+sudo apt install -y python3-venv
 ```
 ```bash
 source Install.sh
@@ -71,7 +71,7 @@ WEB_BROWSER= <METTEZ VOTRE NAVIGATEUR (chrome/firefox)>
 SEUIL_COURSE=62.5
 ```
 
-##### Explication de SEUIL_COURSE
+#### Explication de SEUIL_COURSE
 
 SEUIL_COURSE est une constante qui sert à calculer les course à partir de de nombre de produit dans le bar et le nombre de produit par lot:
 Un example sera plus parlant:
@@ -83,7 +83,7 @@ Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour 
 Et si le seuil est de 0 % alors on achète dès qu'il manque un produit dans le cf le premier example
 Le seuil de 62,5 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer
 
-##### Explication de Inventaire_(Promocash/Auchan).csv
+#### Explication de Inventaire_(Promocash/Auchan).csv
 
 Le fichier csv/Inventaire_(Promocash/Auchan).csv
 
@@ -93,7 +93,7 @@ Coca Cola,0,0,24,525199
 ```
 La dernière colonne est utilisé pour cherche dans la barre de recherche du drive quel produit choisir
 
-##### Explication de Course.csv
+#### Explication de Course.csv
 
 (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, ifls_produits_promocash ou ref_produits_auchan)
 ```csv
@@ -101,7 +101,7 @@ Coca Cherry,1,28,62,24,418172
 ```
 Donc dans l'exemple ci-dessous on peut lire que: La liste course contient du Coca Cherry il faut en acheté 1 pack il y a 28 Coca Chery dans le bar actuellement, il faudrait en avoir 62 et le pack contient 24 Coca cherry, le numéro ou ref du produit dans le magasin
 
-#### Explication de Prix.csv
+#### Explication de Prix.csv
 (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)
 ```csv
 Coca Cherry,1,24,15.12
