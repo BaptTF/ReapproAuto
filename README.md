@@ -10,10 +10,10 @@ sudo apt install -y python3-venv
 source Install.sh
 ```
 Puis REMPLISSER le fichier .env avec les information nécessaire pour votre réappro
-Obligatoire à remplir: MONGO_MDP, MONGO_PEM
-Pour Promocash: NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER
-Pour Auchan: IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER
-Pour faire une réappro dans le bar: EMAIL, WEB_BROWSER
+<p>Obligatoire à remplir: MONGO_MDP, MONGO_PEM</p>
+<p>Pour Promocash: NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER </p>
+<p>Pour Auchan: IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER</p>
+<p>Pour faire une réappro dans le bar: EMAIL, WEB_BROWSER</p>
 
 ```
 MONGO_MDP= <METTEZ ICI LE MDP DE LA BASE DE DONNÉES>
