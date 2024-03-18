@@ -54,14 +54,13 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     sleep(1)
     # Ajouts des produits
     def ajout_produit(row):
-        driver.find_element(By.NAME, "text").send_keys(ref_produits_auchan[row])
-        driver.find_element(By.NAME, "text").send_keys(Keys.ENTER)
+        driver.get(f"https://www.auchan.fr/recherche?text={ref_produits_auchan[row]}")
+        sleep(0.5)
         prix_produit = float(driver.find_element(By.XPATH, "//meta[@itemprop='price']").get_attribute("content").replace(',','.'))
         prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], prix_produit))
         for _ in range(int(nb_de_lots_a_acheter[row])):
             driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
-            sleep(0.1)
-        driver.find_element(By.NAME, "text").clear()
+            sleep(0.5)
     for row in range(len(produits)):
         ajout_produit(row)
         sleep(1)

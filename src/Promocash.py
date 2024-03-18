@@ -43,17 +43,15 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
 
     # Ajouts des produits
     def ajout_produit(row):
-        driver.find_element(By.ID, "searchString").send_keys(ifls_produits_promocash[row])
-        driver.find_element(By.ID, "searchString").send_keys(Keys.ENTER)
+        driver.get(f"https://nancy.promocash.com/produitListe.php?searchString={ifls_produits_promocash[row]}")
         nb_de_lots_int = int(nb_de_lots_a_acheter[row])
-        while nb_de_lots_int > 1:
+        sleep(0.1)
+        for _ in range(nb_de_lots_int - 1):
             driver.find_element(By.XPATH, "//a[@class='pictoPlus']").click()
-            nb_de_lots_int -= 1
         unit_prix = driver.find_element(By.XPATH, "//span[@class='unit']").text
         deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
         prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], float(unit_prix + "." + deci_prix)))
         driver.find_element(By.XPATH, "//input[@value='Commander']").click()
-        driver.find_element(By.ID, "searchString").clear()
 
     # Vérification que le Chariot est vide sinon on le vide
     driver.get("https://nancy.promocash.com/cmdEtape1.php")

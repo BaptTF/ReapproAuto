@@ -37,29 +37,30 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     # Authentification Google
     driver.get("https://bar.telecomnancy.net/auth")
     driver.find_element(By.XPATH, "//*[@class='connect-button mt-4 svelte-107tmt3']").click()
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "identifierId"))).send_keys(EMAIL)
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "identifierId"))).send_keys(EMAIL)
     #driver.find_element(By.ID, "identifierId").send_keys(EMAIL)
     driver.find_element(By.ID, "identifierNext").click()
-    sleep(2)
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "Passwd"))).send_keys(PASSWORD)
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Passwd"))).send_keys(PASSWORD)
     #driver.find_element(By.NAME, "Passwd").send_keys(PASSWORD)
-    sleep(2)
     driver.find_element(By.ID, "passwordNext").click()
     sleep(2)
-
     # Aller sur la page des Réapprovisionnements
     driver.get("https://bar.telecomnancy.net/panel/products/reappro")
-    def ajout_produit(row, marge):
-        sleep(0.5)
-        driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row])
-        sleep(0.1)
+    def ajout_produit(row):
+        if produits[row][-1] == '$':
+            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row][:-1])
+            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys("$")
+        else:
+            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row])
+        sleep(2)
         driver.find_element(By.XPATH, "//div[2]/button").click()
+        sleep(2)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(Keys.BACKSPACE)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(nb_de_lots_acheter[row])
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de produits par lots']").send_keys(Keys.BACKSPACE)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de produits par lots']").send_keys(nb_produits_par_lots[row])
         driver.find_element(By.XPATH, "//td[6]/div/input").click()
-        sleep(1)
+        sleep(0.1)
         select_element = driver.find_element(By.XPATH, "//td[7]/div/select")
         select = Select(select_element)
         select.select_by_index(1)
@@ -67,10 +68,11 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
         driver.find_element(By.XPATH, "//button[contains(.,'Ajouter')]").click()
 
     for row in range(len(produits)):
-        ajout_produit(row, 0.05)
+        ajout_produit(row)
+        sleep(0.2)
 
 
 if __name__ == '__main__':
     PASSWORD = getpass('Password Google:')
     load_dotenv()
-    reappro(getenv("EMAIL"), PASSWORD, getenv("WEB_BROWSER"),"p")
+    reappro(getenv("EMAIL"), PASSWORD, getenv("WEB_BROWSER"),"a")

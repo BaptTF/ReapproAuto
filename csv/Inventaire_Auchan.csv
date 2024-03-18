@@ -1,11 +1,11 @@
-Petits saucissons secs,7,10,1,45710
+Petits saucissons secs,6,10,1,45710
 Pringles Original,5,10,1,909371
 Tuiles Oignon,5,10,1,58596
 tuiles paprika,5,0,1,647450
 Tuiles salees,5,10,1,905451
 Tuc,1,5,1,598457
 Tuiles Barbecue,5,10,1,507168
-Bretzel Maxi,2,2,1,87109
+Bretzel Maxi,1,2,1,87109
 Pringles Oignon,3,10,1,909372
 Soufflés cacahuètes,1,10,1,434061
 Nouilles Poulet,5,2,5,183646
@@ -19,7 +19,7 @@ Riz cantonais,1,5,1,159143
 Monster Munch Original,4,10,1,404838
 Monster munch ketchup,4,10,1,579367
 Kinder Bueno White,50,100,10,587158
-Kinder Bueno,50,100,10,905876
+Kinder Bueno$,65,150,10,905876
 Brownie,0,0,8,71713
 Crepe fourree choco,39,30,15,917944
 Gaufre chocolat,23,20,6,78106
@@ -27,7 +27,7 @@ Oreo Pocket,21,30,5,468893
 KitKat,0,0,10,662145
 Barre Nesquik,29,30,6,510716
 Barre chocapic,27,30,6,509565
-2 Pains choco indus,41,50,8,252180
+2 Pains choco indus,40,50,8,252180
 Barre Cereales Chocolat,24,30,6,514819
 Skittles Mini Rouges,10,10,8,149149
 Barre Cereales Fruits Rouges,28,30,6,336405
