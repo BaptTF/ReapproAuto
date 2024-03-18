@@ -34,6 +34,7 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     # Authentification Auchan
     driver.get("https://www.auchan.fr/magasins/drive/laxou/s-875")
     driver.find_element(By.XPATH, "//button[contains(.,'Continuer sans accepter')]").click()
+    sleep(1)
     driver.find_element(By.XPATH, "//button[contains(.,'Me connecter')]").click()
     driver.find_element(By.ID, "username").send_keys(IDENTIFIANT_AUCHAN)
     driver.find_element(By.ID, "password").send_keys(PASSWORD_AUCHAN)
@@ -50,6 +51,7 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     except:
         print("Le panier est déjà vide")
     prix = []
+    sleep(1)
     # Ajouts des produits
     def ajout_produit(row):
         driver.find_element(By.NAME, "text").send_keys(ref_produits_auchan[row])

@@ -40,8 +40,10 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "identifierId"))).send_keys(EMAIL)
     #driver.find_element(By.ID, "identifierId").send_keys(EMAIL)
     driver.find_element(By.ID, "identifierNext").click()
+    sleep(2)
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.NAME, "Passwd"))).send_keys(PASSWORD)
     #driver.find_element(By.NAME, "Passwd").send_keys(PASSWORD)
+    sleep(2)
     driver.find_element(By.ID, "passwordNext").click()
     sleep(2)
 

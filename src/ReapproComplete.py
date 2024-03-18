@@ -59,7 +59,7 @@ if magasin != 'r':
 else:
     # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
     magasin = input("Voulez-vous faire la reappro pour Promocash ou pour Auchan (p/a) ?")
-    ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/bd)" ) == "bar"
+    ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/bd)" )
     if ans == "bar":
         if input("Etes-vous sûre de vouloir faire la reappro avec le site du bar? (y/n)") == 'y':
             # Get the password for the Google account
