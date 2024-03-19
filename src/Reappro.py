@@ -43,18 +43,18 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Passwd"))).send_keys(PASSWORD)
     #driver.find_element(By.NAME, "Passwd").send_keys(PASSWORD)
     driver.find_element(By.ID, "passwordNext").click()
-    sleep(2)
+    sleep(5)
     # Aller sur la page des Réapprovisionnements
     driver.get("https://bar.telecomnancy.net/panel/products/reappro")
     def ajout_produit(row):
-        if produits[row][-1] == '$':
-            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row][:-1])
-            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys("$")
-        else:
-            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row])
-        sleep(2)
+        for i in range(len(produits[row])):
+            driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row][i])
+            sleep(0.05)
+        produit_selected = driver.find_element(By.XPATH, "//div[2]/button").text
+        if produit_selected != produits[row]:
+            print(f"{produits[row]} mauvais produit selectionné, Produit selectionné {produit_selected}")
         driver.find_element(By.XPATH, "//div[2]/button").click()
-        sleep(2)
+        sleep(0.1)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(Keys.BACKSPACE)
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de lots']").send_keys(nb_de_lots_acheter[row])
         driver.find_element(By.XPATH, "//input[@placeholder='Nombre de produits par lots']").send_keys(Keys.BACKSPACE)

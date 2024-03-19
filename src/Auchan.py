@@ -39,10 +39,10 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     driver.find_element(By.ID, "username").send_keys(IDENTIFIANT_AUCHAN)
     driver.find_element(By.ID, "password").send_keys(PASSWORD_AUCHAN)
     driver.find_element(By.XPATH, "//button[contains(.,'Se connecter')]").click()
-    sleep(1)
+    sleep(3)
     # Vérification que le Chariot est vide sinon on le vide
     driver.get("https://www.auchan.fr/checkout/cart/")
-    sleep(1)
+    sleep(2)
     try:
         driver.find_element(By.XPATH, "//button[contains(.,'Vider mon panier')]").click()
         sleep(1)

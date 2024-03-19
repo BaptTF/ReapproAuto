@@ -17,9 +17,9 @@ def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_p
         supposed_nb_produits[i] = int(supposed_nb_produits[i])
         nb_produits_par_lots[i] = int(nb_produits_par_lots[i])
         #print(produits[i], nb_produits[i], (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * supposed_nb_produits[i])
-        if nb_produits[i] < supposed_nb_produits[i] and nb_produits[i] < (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * supposed_nb_produits[i]:
+        if nb_produits[i] < supposed_nb_produits[i] and nb_produits[i] <= supposed_nb_produits[i] - (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * nb_produits_par_lots[i]:
             nb_de_lots_a_acheter = 1 #((supposed_nb_produits[i] - nb_produits[i]) // nb_produits_par_lots[i]) + 1
-            while nb_de_lots_a_acheter * nb_produits_par_lots[i] + nb_produits[i] < (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * supposed_nb_produits[i]:
+            while nb_de_lots_a_acheter * nb_produits_par_lots[i] + nb_produits[i] < supposed_nb_produits[i] - (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * nb_produits_par_lots[i]:
                 nb_de_lots_a_acheter += 1
             course.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ifls_produits_promocash[i]))
     if not diff:

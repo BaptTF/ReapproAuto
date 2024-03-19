@@ -11,7 +11,7 @@ from os import getenv
 from dotenv import load_dotenv
 
 # Load the environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 # 1 ERE ETAPE: FAIRE L'INVENTAIRE
 # Create a MongoClient object and specify the connection URL
@@ -69,6 +69,7 @@ else:
         else:
             exit()
     elif ans == "bd":
+        # Ici le choix de promocash / auchan décide si on fait calcul la tva pour les prix ou non en fonction de last_tva
         print("Cette fonctionnalité est expérimentale et peut corrompre la base de données, veuillez vérifier les données avant de continuer")
         if input("Etes-vous sûre de vouloir faire la reappro via la base données directement (y/n) ?") == 'y':
             reappro_mongo(client, getenv("EMAIL"), magasin)

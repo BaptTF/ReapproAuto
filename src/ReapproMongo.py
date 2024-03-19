@@ -15,6 +15,19 @@ def reappro_mongo(client, email, magasin):
         print("Reappro annulé")
         exit()
     print("Si tu utilise cette fonctionnalité c'est que tu es sûr de ce que tu fais, sinon tu risque de tout casser, tu es sûr de ce que tu fais?")
+
+    produits = csv_reader(file='Prix.csv', row_number=0)
+    nb_de_lots_acheter = csv_reader(file='Prix.csv', row_number=1)
+    nb_produits_par_lots = csv_reader(file='Prix.csv', row_number=2)
+    prix = csv_reader(file='Prix.csv', row_number=3)
+    if magasin == "p":
+        # Un meilleur calcul serait sum(float(prix[i]) * 100 * int(nb_de_lots_acheter[i])) / 100 mais promocash fait les calculs comme ça mdr
+        print(f"Total HT : {round(sum([float(prix[i]) * int(nb_de_lots_acheter[i]) for i in range(len(produits))]),2):.2f}")
+    elif magasin == "a":
+        print(f"Total TTC : {round(sum([float(prix[i]) * nb_de_lots_acheter[i] for i in range(len(produits))]),2):.2f}")
+    else:
+        print("Drive inconnu")
+        exit()
     second_security = input("Je suis responsable de ma reappro, je suis sûr de ce que je fais (y/n)")
     if second_security != "y":
         print("Reappro annulé")
@@ -43,7 +56,7 @@ def reappro_mongo(client, email, magasin):
                 "created_at": Int64(time()),
                 }
     for i in range(len(produits)):
-        query = { "name": { "$regex": produits[i], "$options" :'i' }}
+        query = {"name": { "$regex": produits[i], "$options" :'i' }, "deleted_at": None}
         collection_item = client["bar"]["items"]
         item = collection_item.find_one(query)
         if item == None:
@@ -51,10 +64,19 @@ def reappro_mongo(client, email, magasin):
             continue
         prix_centimes = Int64(float(prix[i])*100)
         if magasin == "p":
-            prix_centimes_tva = round(prix_centimes * 1.055)
+            if item["last_tva"] == None:
+                print(f"{produits[i]} n'a pas de tva rentré dans le bar")
+                item["last_tva"] = int(input(f"Entrez la tva pour le produit '{produits[i]}' en centième (exemple 550 pour 5.5%)"))
+            elif item["last_tva"] == 0:
+                print(f"{produits[i]} a une tva à 0 %, vérifiez que c'est bien ce que vous voulez")
+                item["last_tva"] = int(input(f"Entrez la tva pour le produit '{produits[i]}' en centième (exemple 550 pour 5.5%)"))
+            elif item["last_tva"] == 1000:
+                print(f"{produits[i]} a une tva à 10 %, vérifiez que c'est bien ce que vous voulez")
+                item["last_tva"] = int(input(f"Entrez la tva pour le produit '{produits[i]}' en centième (exemple 550 pour 5.5%)"))
+            prix_centimes_tva = round(prix_centimes * (1 + (item["last_tva"] / 10000)))
         elif magasin == "a":
             prix_centimes_tva = prix_centimes
-        all_prices = recalcul_prix_centimes(round(prix_centimes_tva / (int(nb_de_lots_acheter[i]) * int(nb_produits_par_lots[i]))))
+        all_prices = recalcul_prix_centimes(round(prix_centimes_tva / int(nb_produits_par_lots[i])))
         newvalues = { "$set": { 
             "amount_left":  Int64(item["amount_left"] + int(nb_de_lots_acheter[i]) * int(nb_produits_par_lots[i])),
             "prices": {
@@ -64,7 +86,8 @@ def reappro_mongo(client, email, magasin):
                 "menu": Int64(all_prices["Menu"]),
                 "privilegies": Int64(all_prices["Privilège"]),
                 "staff_bar": Int64(all_prices["Staff"]),
-                }
+                },
+            "last_tva": Int64(item["last_tva"]),
             }}
         collection_item.update_one(query, newvalues)
         Reappro["items"].append({
@@ -74,7 +97,7 @@ def reappro_mongo(client, email, magasin):
             "item_id": item["id"],
             "item_name": item["name"],
             "item_picture_uri": item["picture_uri"],
-            "tva": Int64(550),
+            "tva": Int64(item["last_tva"]),
             })
         Reappro["total_cost_ht"] += prix_centimes * int(nb_de_lots_acheter[i])
         Reappro["total_cost_ttc"] += prix_centimes * int(nb_de_lots_acheter[i]) * 1.055

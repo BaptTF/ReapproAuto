@@ -69,7 +69,7 @@ IDENTIFIANT_AUCHAN= <METTEZ LE IDF DE AUCHAN>
 PASSWORD_AUCHAN= <METTEZ LE PASSWORD AUCHAN>
 EMAIL= <METTEZ VOTRE ADDRESSE EMAIL AVEC @telecomancy.net>
 WEB_BROWSER= <METTEZ VOTRE NAVIGATEUR (chrome/firefox)>
-SEUIL_COURSE=62.5
+SEUIL_COURSE=50
 ```
 
 #### Explication de SEUIL_COURSE
@@ -81,15 +81,15 @@ Si on veut dans le bar 48 Coca Cola (montant optimal) et que dans le bar on a 47
 
 Le seuil est en pourcentage du nombre de produit par lots <br>
 
-Le seuil par défaut est de 62.5 % en reprenant l'exemple au-dessus <br>
+Le seuil par défaut est de 50 % en reprenant l'exemple au-dessus <br>
 
-Il faut qu'il y ait 39 Coca dans le bar pour déclencher l'achat car 24 * 0.625 = 15 et 24 + 15 = 39 <br>
+Il faut qu'il y ait 36 Coca dans le bar pour déclencher l'achat car 24 * 0.5 = 12 et 48 - 12 = 36 <br>
 
 Ainsi si le seuil est de 100 % alors il faudra qu'il manque un lot complet pour en acheté un nouveau, example: 24 Coca pour 100 à SEUIL_COURSE <br>
 
 Et si le seuil est de 0 % alors on achète dès qu'il manque un produit dans le bar cf le premier example <br>
 
-Le seuil de 62,5 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer 
+Le seuil de 50 % un choix personnel que je trouvais plutôt bien mais reste réglable si vous voulez changer 
 
 #### Explication de Inventaire_(Promocash/Auchan).csv
 
@@ -148,3 +148,18 @@ Soit la réappro avec le site du bar en utilisant Selenium Avantage: + plus de l
 Présente dans le fichier **Reappro.py** 
 Cette possibilité est un fonctionnalité expérimental n'ayant était testé que en dans un base de données local il est donc déconseiller de l'utiliser tant qu'elle n'as pas était testé correctement.
 Soit la réppro en modifiant directement la base de données: Avantage: + rapide, +sûre qu'un navitageur Inconveniant: Si le programme bug au milieu c'est la merde notamment parce qu'on sait pas ce que ça a rentré.
+
+### Partie Statistique
+
+Cette partie sert à faire des statistiques avec les données du bar
+
+### ETAPE OPTIONNELLE CALCULER LE NOMBRE OPTIMALE POUR TOUS LES PRODUITS DANS L'INVENTAIRE D'APRÈS LES STATISTIQUES
+Cette étape va permettre à terme de mettre à jour automatiquement le nombre théorique optimale d'un produit dans le bar. <br>
+Pour calculer ce nombre on part du principe que le nombre optimal d'un produit dans le bar est que le produits soit toujours disponible entre 2 réappros. <br>
+En supposant que les réappro se font toutes les 2 semaines <br>
+On va donc prendre le nombre de vente du produits en question durant les 2,5 semaine dernière (0,5 de plus de marge) comme nombre optimale
+Mais si lors du calcul il n'y a plus du produit dans le bar cela pose un problème car cela va faire anormalement chuté ces ventes alors que
+demande est toujours la même <br>
+Donc si le produits n'est plus en vente on prendre la vente moyenne sur un jour lorsqu'il était en vente lors des 2,5 semaine dernière et on va les rajouté au jours ou le produit n'était plus vendable (on fait un prédiction de basé sur la vente moyenne du produits lorsqu'il toujours en vente récemment) <br>
+Si le produits n'as pas était en vente depuis les 2,5 dernière semaine, on va cherche sur la moyenne de l'ensemble de base de donnée <br>
+Enfin si le produit est nouveau on met le nombre de produit par lot comme nombre optimale (on met "pack" de test comme nombre optimal) <br>

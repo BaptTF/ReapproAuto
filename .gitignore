@@ -9,3 +9,5 @@ Inventaire_modif.csv
 ProduitARecalculer.csv
 .env
 .vscode
+bar.categories.json
+bar.items.json
