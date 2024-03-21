@@ -1,5 +1,6 @@
 from pymongo import MongoClient
-from datetime import datetime
+from datetime import datetime, timedelta
+from datetime import timezone as tz
 from collections import defaultdict
 import matplotlib.pyplot as plt
 from dotenv import load_dotenv
@@ -20,7 +21,7 @@ def get_quantity_sold(nom_produit):
     by_day = defaultdict(int)
     by_week = defaultdict(int)
     for transaction in transactions:
-        date = datetime.utcfromtimestamp(transaction["created_at"]).date()
+        date = datetime.fromtimestamp(transaction["created_at"], tz.utc).date()
         year, week, _ = date.isocalendar()
         if date not in by_day:
             by_day[date] = 0
@@ -60,13 +61,13 @@ def show_get_quantity_sold(nom_produit_liste):
     plt.show()
     client.close()
 
+collection_restocks = db["restocks"]
 def get_item_in_reappro(nom_produit):
-    collection_restocks = client["bar"]["restocks"]
     reappro = collection_restocks.find()
     by_day = defaultdict(int)
     by_week = defaultdict(int)
     for r in reappro:
-        date = datetime.utcfromtimestamp(r["created_at"]).date()
+        date = datetime.fromtimestamp(r["created_at"], tz.utc).date()
         year, week, _ = date.isocalendar()
         if date not in by_day:
             by_day[date] = 0
@@ -102,10 +103,134 @@ def show_get_item_in_reappro(nom_produit_liste):
     plt.show()
     client.close()
     
+def get_amount_paid_per_person():
+    transactions = collection.find()
+    amount_paid_per_person = defaultdict(int)
+    for transaction in transactions:
+        if transaction["state"] == "finished":
+            amount_paid = transaction["total_cost"]
+            person = transaction["account_name"]
+            amount_paid_per_person[person] += amount_paid
+    return amount_paid_per_person
 
+def show_get_amount_paid_per_person():
+    amount_paid_per_person = get_amount_paid_per_person()
+    plt.figure(figsize=(10, 5))
+    plt.bar(amount_paid_per_person.keys(), [i/100 for i in amount_paid_per_person.values()])
+    plt.xlabel('Person')
+    plt.ylabel('Amount paid')
+    plt.title('Amount paid per person')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.show()
+    client.close()
+
+def show_get_amount_paid_for_one_person(person):
+    amount_paid_per_person = get_amount_paid_per_person()
+    print(person, amount_paid_per_person[person] / 100)
+
+def get_amount_of_product_sold_for_last_2_week():
+    transactions = collection.find()
+    amount_of_product_sold = defaultdict(int)
+    for transaction in transactions:
+        date = datetime.fromtimestamp(transaction["created_at"], tz.utc).date()
+        if transaction["state"] == "finished" and date > datetime.now().date() - timedelta(days=14) and transaction["total_cost"] > 0:
+            for item in transaction["items"]:
+                amount_of_product_sold[item["item_name"]] += item["item_amount"]
+    sorted_amount_of_product_sold = dict(sorted(amount_of_product_sold.items(), key=lambda x: x[1], reverse=True))
+    return sorted_amount_of_product_sold
+    #return amount_of_product_sold
+
+def show_get_amount_of_product_sold_for_last_2_week():
+    amount_of_product_sold = get_amount_of_product_sold_for_last_2_week()
+    plt.figure(figsize=(20, 10))
+    #amount_of_product_sold["All Monster"] = amount_of_product_sold["Monster Energy"] + amount_of_product_sold["Monster Ultra Zero Sugar"] + amount_of_product_sold["Monster Ultra Paradise"] + amount_of_product_sold["Monster Ultra Gold"]+ amount_of_product_sold["Monster Mango Loco"] + amount_of_product_sold["Monster Zero Sucre"]
+    print(len(amount_of_product_sold.keys()))
+    plt.bar(amount_of_product_sold.keys(), amount_of_product_sold.values())
+    plt.xticks(range(len(amount_of_product_sold.keys())), amount_of_product_sold.keys(), rotation='vertical')
+    plt.xlabel('Product')
+    plt.ylabel('Amount sold')
+    plt.title('Amount of product sold for the last 2 weeks')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.xlim(-0.5,len(amount_of_product_sold.keys())-.5)
+    plt.show()
+    client.close()
+
+collection_item = db["items"]
+collection_category = db["categories"]
+def create_list_of_product_in_category(category):
+    category_id = collection_category.find_one({"name": category})["id"]
+    items = collection_item.find({"category_id": category_id})
+    return [item["name"] for item in items]
+
+def get_amount_of_product_sold_for_last_2_week_per_category(category):
+    transactions = collection.find()
+    amount_of_product_sold = defaultdict(int)
+    list_of_product_in_category = create_list_of_product_in_category(category)
+    for transaction in transactions:
+        date = datetime.fromtimestamp(transaction["created_at"], tz.utc).date()
+        if transaction["state"] == "finished" and date > datetime.now().date() - timedelta(days=14) and transaction["total_cost"] > 0:
+            for item in transaction["items"]:
+                if item["item_name"] in list_of_product_in_category:
+                    amount_of_product_sold[item["item_name"]] += item["item_amount"]
+    sorted_amount_of_product_sold = dict(sorted(amount_of_product_sold.items(), key=lambda x: x[1], reverse=True))
+    return sorted_amount_of_product_sold
+    #return amount_of_product_sold
+
+def show_get_amount_of_product_sold_for_last_2_week_per_category(category):
+    amount_of_product_sold = get_amount_of_product_sold_for_last_2_week_per_category(category)
+    plt.figure(figsize=(20, 10))
+    #amount_of_product_sold["All Monster"] = amount_of_product_sold["Monster Energy"] + amount_of_product_sold["Monster Ultra Zero Sugar"] + amount_of_product_sold["Monster Ultra Paradise"] + amount_of_product_sold["Monster Ultra Gold"]+ amount_of_product_sold["Monster Mango Loco"] + amount_of_product_sold["Monster Zero Sucre"]
+    print(len(amount_of_product_sold.keys()))
+    plt.bar(amount_of_product_sold.keys(), amount_of_product_sold.values())
+    plt.xticks(range(len(amount_of_product_sold.keys())), amount_of_product_sold.keys(), rotation='vertical')
+    plt.xlabel('Product')
+    plt.ylabel('Amount sold')
+    plt.title('Amount of product sold for the last 2 weeks')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.xlim(-0.5,len(amount_of_product_sold.keys())-.5)
+    plt.show()
+    client.close()
+
+from csvReader import csv_reader
+def get_amount_of_product_sold_for_last_2_week_per_inventory(filename):
+    transactions = collection.find()
+    amount_of_product_sold = defaultdict(int)
+    list_of_product_in_inventory = csv_reader(filename, 0)
+    for transaction in transactions:
+        date = datetime.fromtimestamp(transaction["created_at"], tz.utc).date()
+        if transaction["state"] == "finished" and date > datetime.now().date() - timedelta(days=14) and transaction["total_cost"] > 0:
+            for item in transaction["items"]:
+                if item["item_name"] in list_of_product_in_inventory:
+                    amount_of_product_sold[item["item_name"]] += item["item_amount"]
+    sorted_amount_of_product_sold = dict(sorted(amount_of_product_sold.items(), key=lambda x: x[1], reverse=True))
+    return sorted_amount_of_product_sold
+
+def show_get_amount_of_product_sold_for_last_2_week_per_inventory(filename):
+    amount_of_product_sold = get_amount_of_product_sold_for_last_2_week_per_inventory(filename)
+    plt.figure(figsize=(20, 10))
+    #amount_of_product_sold["All Monster"] = amount_of_product_sold["Monster Energy"] + amount_of_product_sold["Monster Ultra Zero Sugar"] + amount_of_product_sold["Monster Ultra Paradise"] + amount_of_product_sold["Monster Ultra Gold"]+ amount_of_product_sold["Monster Mango Loco"] + amount_of_product_sold["Monster Zero Sucre"]
+    print(len(amount_of_product_sold.keys()))
+    plt.bar(amount_of_product_sold.keys(), amount_of_product_sold.values())
+    plt.xticks(range(len(amount_of_product_sold.keys())), amount_of_product_sold.keys(), rotation='vertical')
+    plt.xlabel('Product')
+    plt.ylabel('Amount sold')
+    plt.title('Amount of product sold for the last 2 weeks')
+    plt.grid(True)
+    plt.tight_layout()
+    plt.xlim(-0.5,len(amount_of_product_sold.keys())-.5)
+    plt.show()
+    client.close()
 
 if __name__ == "__main__":
     nom_produit_liste = ['Coca Cola', 'Coca Cola Zero','Coca Cherry', 'Oasis PCF', "Monster Energy", "Lipton Peche", "Oasis Tropical", "Kinder Bueno", "Orangina"]
-    show_get_quantity_sold(nom_produit_liste)
+    #show_get_quantity_sold(nom_produit_liste)
+    #show_get_amount_paid_per_person()
+    #show_get_amount_paid_for_one_person("Aristide URLI")
+    #show_get_amount_of_product_sold_for_last_2_week()
+    #show_get_amount_of_product_sold_for_last_2_week_per_category("Boissons")
+    show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
 
 #print(somme)

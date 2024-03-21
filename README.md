@@ -154,6 +154,7 @@ Soit la réppro en modifiant directement la base de données: Avantage: + rapide
 Cette partie sert à faire des statistiques avec les données du bar
 
 ### ETAPE OPTIONNELLE CALCULER LE NOMBRE OPTIMALE POUR TOUS LES PRODUITS DANS L'INVENTAIRE D'APRÈS LES STATISTIQUES
+
 Cette étape va permettre à terme de mettre à jour automatiquement le nombre théorique optimale d'un produit dans le bar. <br>
 Pour calculer ce nombre on part du principe que le nombre optimal d'un produit dans le bar est que le produits soit toujours disponible entre 2 réappros. <br>
 En supposant que les réappro se font toutes les 2 semaines <br>
