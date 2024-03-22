@@ -224,13 +224,74 @@ def show_get_amount_of_product_sold_for_last_2_week_per_inventory(filename):
     plt.show()
     client.close()
 
+def get_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours=14):
+    transactions = collection.find()
+    last_transaction_time_per_day_per_product = defaultdict(lambda: datetime.min.replace(tzinfo=tz.utc))
+    for transaction in transactions:
+        date = datetime.fromtimestamp(transaction["created_at"], tz=tz.utc).date()
+        if transaction["state"] == "finished" and date > datetime.now().date() - timedelta(days=nb_jours) and transaction["total_cost"] > 0:
+            for item in transaction["items"]:
+                if item["item_name"] == produit:
+                    if datetime.fromtimestamp(transaction["created_at"], tz=tz.utc) > last_transaction_time_per_day_per_product[date]:
+                        last_transaction_time_per_day_per_product[date] = datetime.fromtimestamp(transaction["created_at"], tz=tz.utc)
+    return last_transaction_time_per_day_per_product
+
+def get_the_time_of_last_reappro_for_each_day_per_product(produit, nb_jours=14):
+    reappro = collection_restocks.find()
+    last_reappro_time_per_day_per_product = defaultdict(lambda: datetime.min.replace(tzinfo=tz.utc))
+    for r in reappro:
+        date = datetime.fromtimestamp(r["created_at"], tz=tz.utc).date()
+        if r["items"] == None:
+            continue
+        if date > datetime.now().date() - timedelta(days=nb_jours):
+            for item in r["items"]:
+                if item["item_name"] == produit:
+                    if datetime.fromtimestamp(r["created_at"], tz=tz.utc) > last_reappro_time_per_day_per_product[date]:
+                        last_reappro_time_per_day_per_product[date] = datetime.fromtimestamp(r["created_at"], tz=tz.utc)
+    return last_reappro_time_per_day_per_product
+    
+def addlabels(x,y,label):
+    for i in range(len(x)):
+        plt.text(i, y[i], label[i], ha = 'center')
+
+import calendar
+def show_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours=14):
+    last_transaction_time_per_day_per_product = get_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours)
+    last_reappro_time_per_day_per_product = get_the_time_of_last_reappro_for_each_day_per_product(produit, nb_jours)
+    print(len(last_transaction_time_per_day_per_product.values()), len(last_reappro_time_per_day_per_product.values()))
+    #print(last_reappro_time_per_day_per_product)
+    plt.figure(figsize=(20, 10))
+    label = [str(value.astimezone().time()) for value in last_transaction_time_per_day_per_product.values()]
+    value = []
+    for date in last_transaction_time_per_day_per_product.keys():
+        minute = (last_transaction_time_per_day_per_product[date] - last_reappro_time_per_day_per_product[date]).total_seconds() // 60
+        if minute > 3600*12 or minute < 0:
+            minute = 0
+        value.append(minute)
+    #value = [(i - j).total_seconds() // 60 for i,j in zip(last_transaction_time_per_day_per_product.values(), last_reappro_time_per_day_per_product.values())]
+    display = [(calendar.day_name[i.weekday()] + " " + str(i)) for i in last_transaction_time_per_day_per_product.keys()]
+    plt.bar(display, value)
+    addlabels(display, value, label)
+    plt.xticks(range(len(last_transaction_time_per_day_per_product.keys())), display, rotation='vertical')
+    plt.xlabel('Day')
+    plt.ylabel('Time between the reappro and the last transaction (minutes)')
+    plt.title(f'Time of last transaction of {produit} for the last 2 weeks per day (minutes)') 
+    plt.grid(True)
+    plt.tight_layout()
+    plt.xlim(-0.5,len(last_transaction_time_per_day_per_product.keys())-.5)
+    plt.show()
+    client.close()
+
+
+
 if __name__ == "__main__":
     nom_produit_liste = ['Coca Cola', 'Coca Cola Zero','Coca Cherry', 'Oasis PCF', "Monster Energy", "Lipton Peche", "Oasis Tropical", "Kinder Bueno", "Orangina"]
     #show_get_quantity_sold(nom_produit_liste)
     #show_get_amount_paid_per_person()
     #show_get_amount_paid_for_one_person("Aristide URLI")
     #show_get_amount_of_product_sold_for_last_2_week()
-    #show_get_amount_of_product_sold_for_last_2_week_per_category("Boissons")
-    show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
+    #show_get_amount_of_product_sold_for_last_2_week_per_category("Viennoiseries")
+    #show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
+    show_the_time_of_last_transaction_for_each_day_per_product("Torsade", 30)
 
 #print(somme)

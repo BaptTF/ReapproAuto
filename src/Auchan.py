@@ -56,13 +56,24 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     def ajout_produit(row):
         driver.get(f"https://www.auchan.fr/recherche?text={ref_produits_auchan[row]}")
         sleep(0.5)
-        prix_produit = float(driver.find_element(By.XPATH, "//meta[@itemprop='price']").get_attribute("content").replace(',','.'))
+        try:
+            prix_produit = float(driver.find_element(By.XPATH, "//meta[@itemprop='price']").get_attribute("content").replace(',','.'))
+        except:
+            print(f"Le produit {produits[row]} n'est pas disponible")
+            return
         prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], prix_produit))
-        for _ in range(int(nb_de_lots_a_acheter[row])):
-            driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
+        for i in range(int(nb_de_lots_a_acheter[row])):
+            try:
+                driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
+            except:
+                print(f"Le produit {produits[row]} est au max, il y a {i+1} / {nb_de_lots_a_acheter[row]} mis dans le panier")
+                break
             sleep(0.5)
     for row in range(len(produits)):
-        ajout_produit(row)
+        try:
+            ajout_produit(row)
+        except:
+            print(f"Le produit {produits[row]} n'a pas été rajouté au panier")
         sleep(1)
     # Vérification du panier
     sleep(1)
