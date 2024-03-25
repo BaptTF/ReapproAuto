@@ -23,7 +23,7 @@ def inventaire_mongo(client, file):
     Inventaire = []
 
     for i in range(len(produits)):
-        query = { "name": { "$regex": produits[i], "$options" :'i' }}
+        query = { "name": { "$regex": produits[i], "$options" :'i'}, "deleted_at": None}
         produit = collection.find_one(query)
         if produit == None:
             amount_left = "Produit non trouvé"

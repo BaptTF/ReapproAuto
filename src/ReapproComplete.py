@@ -6,6 +6,7 @@ from Auchan import auchan
 from Reappro import reappro
 from ReapproMongo import reappro_mongo
 from remiseStockManuelle import stock_max
+from UpdatePricePromocash import updatePricePromocash
 from pymongo import MongoClient
 from os import getenv
 from dotenv import load_dotenv
@@ -59,6 +60,10 @@ if magasin != 'r':
 else:
     # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
     magasin = input("Voulez-vous faire la reappro pour Promocash ou pour Auchan (p/a) ?")
+    if magasin == 'p':
+        if input("Voulez-vous mettre à jour les prix sur Promocash (y/n) ?") == 'y':
+            updatePricePromocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
+            print("Les prix ont été mis à jour dans le fichier Prix.csv")
     ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/bd)" )
     if ans == "bar":
         if input("Etes-vous sûre de vouloir faire la reappro avec le site du bar? (y/n)") == 'y':

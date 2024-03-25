@@ -1,7 +1,7 @@
 # ReapproAuto
 
 ## TLDR
-Avoir soit Firefox soit Google Chrome si possible installé avec apt parce que j'ai pas testé si ça fonctionne installé avec snap mais probablement pas mdr
+Avoir soit Firefox soit Google Chrome si possible installé avec apt parce que ça ne fonctionne pas installé avec snap (quel surprise)
 https://doc.ubuntu-fr.org/firefox#installer_firefox_en_deb_classique_au_lieu_de_snap
 ```bash
 sudo apt install -y python3-venv

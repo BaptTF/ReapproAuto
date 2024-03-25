@@ -50,7 +50,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
             driver.find_element(By.XPATH, "//a[@class='pictoPlus']").click()
         unit_prix = driver.find_element(By.XPATH, "//span[@class='unit']").text
         deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
-        prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], float(unit_prix + "." + deci_prix)))
+        prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], float(unit_prix + "." + deci_prix), ifls_produits_promocash[row]))
         driver.find_element(By.XPATH, "//input[@value='Commander']").click()
 
     # Vérification que le Chariot est vide sinon on le vide
@@ -93,7 +93,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
             nb_de_lots_int -= 1
         unit_prix = driver.find_element(By.XPATH, "//span[@class='unit']").text
         deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
-        prix_manuelle.append((produits[row],int(supposed_nb_produits[row]) -  int(nb_produits[row]), float(unit_prix + "." + deci_prix)))
+        prix_manuelle.append((produits[row],int(supposed_nb_produits[row]) -  int(nb_produits[row]), float(unit_prix + "." + deci_prix), ifls_produits_promocash[row]))
         driver.find_element(By.XPATH, "//input[@value='Commander']").click()
         driver.find_element(By.ID, "searchString").clear()
 
