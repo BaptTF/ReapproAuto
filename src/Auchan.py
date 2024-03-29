@@ -73,7 +73,7 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
             ajout_produit(row)
         except Exception as e:
             print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
-            produit_non_trouve.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
+            produit_non_trouve.append((produits[row], nb_de_lots_a_acheter, nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ref_produits_auchan[row]))
             print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
             print("Passage au produit suivant")
         sleep(1)
