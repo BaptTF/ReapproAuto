@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from csvReader import csv_reader
 from csvWriter import csv_writer
+from Create_Browser import create_browser
 from time import sleep
 from dotenv import load_dotenv
 from os import getenv
@@ -19,17 +20,7 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     ref_produits_auchan = csv_reader(file='Course.csv', row_number=5)
 
     # Création du chrome en changeant sa taille parce que sinon le login marche pas
-    if WEB_BROWSER == "chrome":
-        opts = webdriver.ChromeOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.add_experimental_option("detach", True)
-        driver = webdriver.Chrome(options=opts)
-    elif WEB_BROWSER == "firefox":
-        opts = webdriver.FirefoxOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.set_preference('detach', True)
-        driver = webdriver.Firefox(options=opts)
-    driver.implicitly_wait(1)
+    driver = create_browser(WEB_BROWSER)
 
     # Authentification Auchan
     driver.get("https://www.auchan.fr/magasins/drive/laxou/s-875")
@@ -72,8 +63,9 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     for row in range(len(produits)):
         try:
             ajout_produit(row)
-        except:
-            print(f"Le produit {produits[row]} n'a pas été rajouté au panier")
+        except Exception as e:
+            print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+            print("Passage au produit suivant")
         sleep(1)
     # Vérification du panier
     sleep(1)

@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from csvReader import csv_reader
 from csvWriter import csv_writer
+from Create_Browser import create_browser
 from time import sleep
 from dotenv import load_dotenv
 from os import getenv
@@ -19,18 +20,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     ifls_produits_promocash = csv_reader(file='Course.csv', row_number=5)
 
     # Création du chrome en changeant sa taille parce que sinon le login marche pas
-    if WEB_BROWSER == "chrome":
-        opts = webdriver.ChromeOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.add_experimental_option("detach", True)
-        driver = webdriver.Chrome(options=opts)
-    elif WEB_BROWSER == "firefox":
-        opts = webdriver.FirefoxOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.set_preference('detach', True)
-        driver = webdriver.Firefox(options=opts)
-    driver.implicitly_wait(1)
-
+    driver = create_browser(WEB_BROWSER)
 
     # Authentification Promocash
     driver.get("https://nancy.promocash.com/index.php")
@@ -67,7 +57,11 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     prix = []
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and produits[row] != "Bonbons Haribo":
-            ajout_produit(row)
+            try:
+                ajout_produit(row)
+            except Exception as e:
+                print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+                print("Passage au produit suivant")
         else:
             print(f"Le produit {produits[row]} n'a pas été ajouté car il n'est pas dans la base de données")
 
@@ -97,7 +91,11 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
 
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and int(supposed_nb_produits[row]) -  int(nb_produits[row]) > 0:
-            ajout_produit(row)
+            try:
+                ajout_produit(row)
+            except Exception as e:
+                print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+                print("Passage au produit suivant")
     if prix_manuelle != []:
         prix_manuelle.append(("Total HT",sum([x[2] for x in prix_manuelle])))
     else:

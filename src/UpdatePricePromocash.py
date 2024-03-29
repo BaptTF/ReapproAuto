@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from csvReader import csv_reader
 from csvWriter import csv_writer
+from Create_Browser import create_browser
 from time import sleep
 from dotenv import load_dotenv
 from os import getenv
@@ -17,18 +18,10 @@ def updatePricePromocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER
     nb_de_lots_a_acheter = csv_reader(file='Prix.csv', row_number=1)
     nb_produits_par_lots = csv_reader(file='Prix.csv', row_number=2)
     ifls_produits_promocash = csv_reader(file='Prix.csv', row_number=4)
+    
     # Création du chrome en changeant sa taille parce que sinon le login marche pas
-    if WEB_BROWSER == "chrome":
-        opts = webdriver.ChromeOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.add_argument("--headless=new")
-        driver = webdriver.Chrome(options=opts)
-    elif WEB_BROWSER == "firefox":
-        opts = webdriver.FirefoxOptions()
-        opts.add_argument("--headless")
-        opts.add_argument("--window-size=1620,1000")
-        driver = webdriver.Firefox(options=opts)
-    driver.implicitly_wait(1)
+    driver = create_browser(WEB_BROWSER)
+
     print("Updating", end=" ")
     # Authentification Promocash
     driver.get("https://nancy.promocash.com/index.php")

@@ -286,12 +286,12 @@ def show_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours
 
 if __name__ == "__main__":
     nom_produit_liste = ['Coca Cola', 'Coca Cola Zero','Coca Cherry', 'Oasis PCF', "Monster Energy", "Lipton Peche", "Oasis Tropical", "Kinder Bueno", "Orangina"]
-    #show_get_quantity_sold(nom_produit_liste)
+    show_get_quantity_sold(nom_produit_liste)
     #show_get_amount_paid_per_person()
     #show_get_amount_paid_for_one_person("Aristide URLI")
     #show_get_amount_of_product_sold_for_last_2_week()
     #show_get_amount_of_product_sold_for_last_2_week_per_category("Viennoiseries")
     #show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
-    show_the_time_of_last_transaction_for_each_day_per_product("Pain au Chocolat(ine)", 30)
+    #show_the_time_of_last_transaction_for_each_day_per_product("Pain au Chocolat(ine)", 30)
 
 #print(somme)

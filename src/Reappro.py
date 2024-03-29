@@ -7,6 +7,7 @@ from selenium.webdriver.support.select import Select
 from getpass import getpass
 from time import sleep
 from csvReader import csv_reader
+from Create_Browser import create_browser
 from dotenv import load_dotenv
 from os import getenv
 
@@ -22,17 +23,7 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     prix = csv_reader(file='Prix.csv', row_number=3)
 
     # Création du chrome en changeant sa taille
-    if WEB_BROWSER == "chrome":
-        opts = webdriver.ChromeOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.add_experimental_option("detach", True)
-        driver = webdriver.Chrome(options=opts)
-    elif WEB_BROWSER == "firefox":
-        opts = webdriver.FirefoxOptions()
-        opts.add_argument("--window-size=1620,1000")
-        opts.set_preference('detach', True)
-        driver = webdriver.Firefox(options=opts)
-    driver.implicitly_wait(1)
+    driver = create_browser(WEB_BROWSER)
 
     # Authentification Google
     driver.get("https://bar.telecomnancy.net/auth")
