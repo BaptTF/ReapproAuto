@@ -23,7 +23,7 @@ Gaufre chocolat,19,24,6,78106
 KitKat,33,20,10,662145
 Barre Nesquik,21,24,6,510716
 Barre chocapic,22,24,6,509565
-2 Pains choco indus,24,40,8,252180
+2 Pains choco indus,23,40,8,252180
 Barre Cereales Chocolat,27,24,6,514819
 Skittles Mini Rouges,4,8,8,149149
 Barre Cereales Fruits Rouges,23,24,6,336405
@@ -47,10 +47,10 @@ Oreo Pocket,18,20,5,468893
 Nouilles Boeuf,5,3,1,482770
 Kinder Country,21,30,18,426818
 Twix White,15,20,5,631948
-5 Schokobons,35,20,80,72628
+5 Schokobons,33,20,80,72628
 Napolitain,29,24,12,114583
 Magnum Amande,18,16,8,802809
-Magnum Double Gold,4,8,4,862306
+Magnum Double Gold,3,8,4,862306
 Magnum Classique,15,16,8,802818
 Magnum Blanc,20,16,8,
 Magnum Cookies Blanc,4,8,8,
@@ -72,9 +72,9 @@ Twix$,40,36,10,
 Twix glace,14,16,6,801867
 Snickers glace,27,18,6,
 Cacahuetes 125g,1,2,1,
-3Ds Nature \(Familiale\),Produit non trouvé,0,1,
-3Ds Fromage \(Familiale\),Produit non trouvé,0,1,
-Grande Intenso,12,0,16,
+3Ds Nature \(Familiale\),3,3,1,
+3Ds Fromage \(Familiale\),5,5,1,
+Grande Intenso,11,0,16,
 Cappucino,20,8,16,242516
 Expresso Intenso,57,32,16,760508
 Espresso,51,16,16,909293

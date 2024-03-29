@@ -3,6 +3,3 @@ source venv/bin/activate
 pip install -r requirements.txt
 deactivate
 cp -n .env.example .env
-touch csv/Inventaire.csv
-
-
