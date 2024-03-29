@@ -50,7 +50,10 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
         for i in range(len(produits[row])):
             driver.find_element(By.XPATH, "//input[@placeholder='Nom du produit']").send_keys(produits[row][i])
             sleep(0.05)
+        sleep(0.05)
         produit_selected = driver.find_element(By.XPATH, "//div[2]/button").text
+        if produits[row][-1] == '$':
+            produits[row] = produits[row][:-1]
         if produit_selected != produits[row]:
             print(f"{produits[row]} possiblement mauvais produit selectionné, Produit selectionné {produit_selected}")
         driver.find_element(By.XPATH, "//div[2]/button").click()

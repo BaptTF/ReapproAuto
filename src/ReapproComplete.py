@@ -7,6 +7,7 @@ from Reappro import reappro
 from ReapproMongo import reappro_mongo
 from remiseStockManuelle import stock_max
 from UpdatePricePromocash import updatePricePromocash
+from PrintCalculPrixTotal import print_calcul_prix_total
 from pymongo import MongoClient
 from os import getenv
 from dotenv import load_dotenv
@@ -59,6 +60,7 @@ if magasin != 'r':
             print("Stock manuelle non modifié")
 else:
     # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
+    print_calcul_prix_total("all")
     magasin = input("Voulez-vous faire la reappro pour Promocash ou pour Auchan (p/a) ?")
     if magasin == 'p':
         if input("Voulez-vous mettre à jour les prix sur Promocash (y/n) ?") == 'y':

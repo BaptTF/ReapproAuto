@@ -63,7 +63,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
         print("Le panier a été vidé")
     except:
         print("Le panier était déjà vide")
-
+    sleep(0.2)
     prix = []
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and produits[row] != "Bonbons Haribo":
@@ -85,8 +85,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     ifls_produits_promocash = csv_reader('Course_manuelle.csv', row_number=3)
     prix_manuelle = []
     def ajout_produit(row):
-        driver.find_element(By.ID, "searchString").send_keys(ifls_produits_promocash[row])
-        driver.find_element(By.ID, "searchString").send_keys(Keys.ENTER)
+        driver.get(f"https://nancy.promocash.com/produitListe.php?searchString={ifls_produits_promocash[row]}")
         nb_de_lots_int = int(supposed_nb_produits[row]) -  int(nb_produits[row])
         while nb_de_lots_int > 1:
             driver.find_element(By.XPATH, "//a[@class='pictoPlus']").click()
@@ -95,7 +94,6 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
         deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
         prix_manuelle.append((produits[row],int(supposed_nb_produits[row]) -  int(nb_produits[row]), float(unit_prix + "." + deci_prix), ifls_produits_promocash[row]))
         driver.find_element(By.XPATH, "//input[@value='Commander']").click()
-        driver.find_element(By.ID, "searchString").clear()
 
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and int(supposed_nb_produits[row]) -  int(nb_produits[row]) > 0:

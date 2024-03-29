@@ -32,7 +32,7 @@ def recalcul_prix(prix):
                  "Menu": arrondi_au_mutilple(prix * 1.125) ,}
 
 if __name__ == '__main__':
-    print(recalcul_prix(0.60).items())
+    print(recalcul_prix(0.57584).items())
     #i = 0.0
     # while i < 3:
     #     round(i, 2)

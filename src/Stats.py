@@ -292,6 +292,6 @@ if __name__ == "__main__":
     #show_get_amount_of_product_sold_for_last_2_week()
     #show_get_amount_of_product_sold_for_last_2_week_per_category("Viennoiseries")
     #show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
-    show_the_time_of_last_transaction_for_each_day_per_product("Torsade", 30)
+    show_the_time_of_last_transaction_for_each_day_per_product("Pain au Chocolat(ine)", 30)
 
 #print(somme)

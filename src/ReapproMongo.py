@@ -1,5 +1,4 @@
 from csvReader import csv_reader
-from csvWriter import csv_writer
 from pymongo import MongoClient
 from time import time
 from uuid import uuid4
@@ -7,6 +6,7 @@ from os import getenv
 from dotenv import load_dotenv
 from bson.int64 import Int64
 from Recalcul_prix_centimes import recalcul_prix_centimes
+from PrintCalculPrixTotal import print_calcul_prix_total
 
 def reappro_mongo(client, email, magasin):
     print("Attention, cette fonction est dangereuse, elle modifie la base de donnée du bar")
@@ -16,18 +16,11 @@ def reappro_mongo(client, email, magasin):
         exit()
     print("Si tu utilise cette fonctionnalité c'est que tu es sûr de ce que tu fais, sinon tu risque de tout casser, tu es sûr de ce que tu fais?")
 
+    print_calcul_prix_total(magasin)
     produits = csv_reader(file='Prix.csv', row_number=0)
     nb_de_lots_acheter = csv_reader(file='Prix.csv', row_number=1)
     nb_produits_par_lots = csv_reader(file='Prix.csv', row_number=2)
     prix = csv_reader(file='Prix.csv', row_number=3)
-    if magasin == "p":
-        # Un meilleur calcul serait sum(float(prix[i]) * 100 * int(nb_de_lots_acheter[i])) / 100 mais promocash fait les calculs comme ça mdr
-        print(f"Total HT : {round(sum([float(prix[i]) * int(nb_de_lots_acheter[i]) for i in range(len(produits))]),2):.2f}")
-    elif magasin == "a":
-        print(f"Total TTC : {round(sum([float(prix[i]) * nb_de_lots_acheter[i] for i in range(len(produits))]),2):.2f}")
-    else:
-        print("Drive inconnu")
-        exit()
     second_security = input("Je suis responsable de ma reappro, je suis sûr de ce que je fais (y/n)")
     if second_security != "y":
         print("Reappro annulé")

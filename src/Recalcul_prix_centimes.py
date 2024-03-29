@@ -32,7 +32,7 @@ def recalcul_prix_centimes(prix: int):
                  "Menu": arrondi_au_mutilple((prix * 1125) / 1000),}
 
 if __name__ == '__main__':
-    print(recalcul_prix_centimes(int((1390*1.055)/24)).items())
+    print(recalcul_prix_centimes(int(3199*0.9)/50).items())
     #i = 0.0
     # while i < 3:
     #     round(i, 2)
