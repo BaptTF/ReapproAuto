@@ -42,6 +42,7 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
     except:
         print("Le panier est déjà vide")
     prix = []
+    produit_non_trouve = []
     sleep(1)
     # Ajouts des produits
     def ajout_produit(row):
@@ -51,6 +52,9 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
             prix_produit = float(driver.find_element(By.XPATH, "//meta[@itemprop='price']").get_attribute("content").replace(',','.'))
         except:
             print(f"Le produit {produits[row]} n'est pas disponible")
+            produit_non_trouve.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
+            print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
+            print("Passage au produit suivant")
             return
         prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], prix_produit))
         for i in range(int(nb_de_lots_a_acheter[row])):
@@ -58,6 +62,10 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
                 driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
             except:
                 print(f"Le produit {produits[row]} est au max, il y a {i+1} / {nb_de_lots_a_acheter[row]} mis dans le panier")
+                prix[-1][2] = i + 1
+                produit_non_trouve.append((produits[i], nb_de_lots_a_acheter - i - 1, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
+                print(f"{nb_de_lots_a_acheter - i - 1} {produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
+                print("Passage au produit suivant")
                 break
             sleep(0.5)
     for row in range(len(produits)):
@@ -65,12 +73,16 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
             ajout_produit(row)
         except Exception as e:
             print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+            produit_non_trouve.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
+            print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
             print("Passage au produit suivant")
         sleep(1)
     # Vérification du panier
     sleep(1)
     driver.get("https://www.auchan.fr/checkout/cart/")
     csv_writer('Prix.csv', prix)
+    if produit_non_trouve != []:
+        csv_writer('Produit_non_trouve.csv', produit_non_trouve)
 
 if __name__ == '__main__':
     load_dotenv()

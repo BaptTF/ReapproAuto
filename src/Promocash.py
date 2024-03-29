@@ -55,12 +55,15 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
         print("Le panier était déjà vide")
     sleep(0.2)
     prix = []
+    produits_non_trouves = []
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and produits[row] != "Bonbons Haribo":
             try:
                 ajout_produit(row)
             except Exception as e:
                 print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
+                print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
                 print("Passage au produit suivant")
         else:
             print(f"Le produit {produits[row]} n'a pas été ajouté car il n'est pas dans la base de données")
@@ -95,6 +98,8 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
                 ajout_produit(row)
             except Exception as e:
                 print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
+                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
+                print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
                 print("Passage au produit suivant")
     if prix_manuelle != []:
         prix_manuelle.append(("Total HT",sum([x[2] for x in prix_manuelle])))
@@ -102,6 +107,8 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
         prix_manuelle.append(("Total HT",0))
     csv_writer('Prix_manuelle.csv', prix_manuelle)
     driver.get("https://nancy.promocash.com/cmdEtape1.php")
+
+    csv_writer('Produits_non_trouves.csv', produits_non_trouves)
 
 if __name__ == '__main__':
     load_dotenv()

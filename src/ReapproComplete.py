@@ -35,6 +35,7 @@ if magasin != 'r':
     else:
         creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
     print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
+    print(f"Course non drive calculer dans le fichier Course_non_drive.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots)")
 
     if magasin == 'p':
         # 3 EME ETAPE: ALLER SUR PROMOCASH

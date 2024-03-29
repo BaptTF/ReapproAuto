@@ -11,6 +11,7 @@ def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_p
     #produits = [(p,nb,s) for p,nb,s in zip(produits,nb_produits, supposed_nb_produits)]
 
     course = []
+    course_non_drive = []
     for i in range(len(produits)):
         if nb_produits[i] == 'Produit non trouvé': nb_produits[i] = 999999999
         nb_produits[i] = int(nb_produits[i])
@@ -22,8 +23,11 @@ def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_p
             while nb_de_lots_a_acheter * nb_produits_par_lots[i] + nb_produits[i] < supposed_nb_produits[i] - (seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots / 100) * nb_produits_par_lots[i]:
                 nb_de_lots_a_acheter += 1
             course.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ifls_produits_promocash[i]))
+            if ifls_produits_promocash[i] == '':
+                course_non_drive.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ifls_produits_promocash[i]))
     if not diff:
         csv_writer('Course.csv', course)
+        csv_writer('Course_non_drive.csv', course_non_drive)
     return course
 
 def diff(course, seuil):
