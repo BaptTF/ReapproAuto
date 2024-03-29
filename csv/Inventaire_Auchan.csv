@@ -1,3 +1,4 @@
+Produit,Quantité restante,Quantité optimale,Nombre de produits par lots,REF
 Petits saucissons secs,6,8,1,45710
 Pringles Original,5,5,1,909371
 Tuiles Oignon,5,5,1,58596
@@ -18,12 +19,12 @@ Riz cantonais,0,5,1,159143
 Monster Munch Original,3,3,1,404838
 Monster munch ketchup,2,6,1,579367
 Brownie,15,16,8,71713
-Crepe fourree choco,24,30,15,917944
+Crepe fourree choco,21,30,15,917944
 Gaufre chocolat,19,24,6,78106
 KitKat,33,20,10,662145
 Barre Nesquik,21,24,6,510716
 Barre chocapic,22,24,6,509565
-2 Pains choco indus,23,16,8,252180
+2 Pains choco indus,22,40,8,252180
 Barre Cereales Chocolat,27,24,6,514819
 Skittles Mini Rouges,4,8,8,149149
 Barre Cereales Fruits Rouges,23,24,6,336405
@@ -47,7 +48,7 @@ Oreo Pocket,18,20,5,468893
 Nouilles Boeuf,5,3,1,482770
 Kinder Country,21,30,18,426818
 Twix White,15,20,5,631948
-5 Schokobons,33,16,16,72628
+5 Schokobons,33,20,16,72628
 Napolitain,29,24,12,114583
 Magnum Amande,18,16,8,802809
 Magnum Double Gold,3,8,4,862306

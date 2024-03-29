@@ -40,7 +40,7 @@ def updatePricePromocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER
         deci_prix = driver.find_element(By.XPATH, "//span[@class='deci']").text
         prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], float(unit_prix + "." + deci_prix), ifls_produits_promocash[row]))
         
-    prix = []
+    prix = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits par lots', 'Prix', 'REF')]
     #print("Updating", end=" ")
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and produits[row] != "Bonbons Haribo":

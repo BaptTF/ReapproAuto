@@ -54,19 +54,20 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     except:
         print("Le panier était déjà vide")
     sleep(0.2)
-    prix = []
-    produits_non_trouves = []
+    prix = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits par lots', 'Prix', 'REF')]
+    produits_non_trouves = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits par lots', 'REF')]
     for row in range(len(produits)):
         if ifls_produits_promocash[row] != '' and produits[row] != "Bonbons Haribo":
             try:
                 ajout_produit(row)
             except Exception as e:
                 print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
-                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
+                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
                 print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
                 print("Passage au produit suivant")
         else:
-            print(f"Le produit {produits[row]} n'a pas été ajouté car il n'est pas dans la base de données")
+            print(f"Le produit {produits[row]} n'est pas disponible sur le drive, ajout dans le fichier Produit_non_trouve.csv")
+            produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
 
     csv_writer('Prix.csv', prix)
 
@@ -80,7 +81,7 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
     nb_produits = csv_reader('Course_manuelle.csv', row_number=1)
     supposed_nb_produits = csv_reader('Course_manuelle.csv', row_number=2)
     ifls_produits_promocash = csv_reader('Course_manuelle.csv', row_number=3)
-    prix_manuelle = []
+    prix_manuelle = [('Produit', 'Nombre de lots à acheter', 'Prix', 'REF')]
     def ajout_produit(row):
         driver.get(f"https://nancy.promocash.com/produitListe.php?searchString={ifls_produits_promocash[row]}")
         nb_de_lots_int = int(supposed_nb_produits[row]) -  int(nb_produits[row])
@@ -101,8 +102,8 @@ def promocash(NUMERO_CARTE_PROMOCASH, PASSWORD_PROMOCASH, WEB_BROWSER):
                 produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ifls_produits_promocash[row]))
                 print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
                 print("Passage au produit suivant")
-    if prix_manuelle != []:
-        prix_manuelle.append(("Total HT",sum([x[2] for x in prix_manuelle])))
+    if prix_manuelle != [('Produit', 'Nombre de lots à acheter', 'Prix', 'REF')]:
+        prix_manuelle.append(("Total HT",sum([x[2] for x in prix_manuelle[1:]])))
     else:
         prix_manuelle.append(("Total HT",0))
     csv_writer('Prix_manuelle.csv', prix_manuelle)

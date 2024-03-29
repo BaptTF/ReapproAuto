@@ -8,6 +8,8 @@ from ReapproMongo import reappro_mongo
 from remiseStockManuelle import stock_max
 from UpdatePricePromocash import updatePricePromocash
 from PrintCalculPrixTotal import print_calcul_prix_total
+from CalculOptimalAmount import calcul_optimal_amount
+from UpdateOptimalAmount import update_optimal_amount
 from pymongo import MongoClient
 from os import getenv
 from dotenv import load_dotenv
@@ -42,6 +44,7 @@ if magasin != 'r':
         if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':
             promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
             print("Commande faite sur Promocash et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
+            print("Les produits non trouvés sont dans le fichier Produits_non_trouves.csv")
         else:
             exit()
     else:
@@ -49,6 +52,7 @@ if magasin != 'r':
         if input("Voulez-vous commander sur Auchan (y/n) ?") == 'y':
             auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"), getenv("WEB_BROWSER"))
             print("Commande faite sur Auchan et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
+            print("Les produits non trouvés sont dans le fichier Produits_non_trouves.csv")
         else:
             exit()
 
@@ -59,7 +63,7 @@ if magasin != 'r':
             print("Stock manuelle remis à jour")
         else:
             print("Stock manuelle non modifié")
-else:
+elif magasin == 'r':
     # 4 EME ETAPE: FAIRE LA REAPPRO SUR LE BAR
     print_calcul_prix_total("all")
     magasin = input("Voulez-vous faire la reappro pour Promocash ou pour Auchan (p/a) ?")
@@ -84,5 +88,26 @@ else:
             print("Reappro fait via la base de données directement")
         else:
             exit()
+elif magasin == 'u':
+    # 5 EME ETAPE: CALCULER LE NOMBRE OPTIMAL DE PRODUITS
+    magasin = input("Voulez-vous calculer le nombre optimal de produits pour Promocash ou pour Auchan (p/a) ?")
+    if magasin == 'p':
+        calcul_optimal_amount(client, magasin)
+    elif magasin == 'a':
+        calcul_optimal_amount(client, magasin)
+    else:
+        print("Drive inconnue")
+    
+    # 6 EME ETAPE: METTRE A JOUR LE NOMBRE OPTIMAL DE PRODUITS
+    magasin = input("Voulez-vous mettre à jour le nombre optimal de produits (y/n) ?")
+    if magasin == 'y':
+        update_optimal_amount(client, "Update_optimal.csv", security=False)
+    elif magasin == 'n':
+        print("Le nombre optimal de produits n'a pas été mis à jour")
+    else:
+        print("Commande inconnue, Le nombre optimal de produits n'a pas été mis à jour")
+else:
+    print("Commande inconnue")
+
     # Close the connection when you're done
 client.close()

@@ -1,3 +1,4 @@
+Produit,Quantité restante,Quantité optimale,Nombre de produits par lots,REF
 Coca Cola,66,62,24,525199
 Coca Cherry,55,62,24,418172
 Coca Cola Zero,40,48,24,418171
@@ -23,15 +24,15 @@ Jus Orange,20,24,12,892560
 Jus fraise,15,18,12,592698
 Jus Multifruit,11,18,12,892620
 Jus Peche,13,18,12,892522
-Jus ACE,14,18,12,892619
+Jus ACE,13,18,12,892619
 Jus Mangue,12,18,12,892590
-Jus Banane,14,18,12,892580
+Jus Banane,13,18,12,892580
 Jus Abricot,24,18,12,892571
 Jus Pomme,20,24,12,892556
 Jus Raisin,12,18,12,892628
 Jus tomate,8,18,12,892629
 Jus Poire,0,0,12,892540
-Jus Pamplemousse,12,18,12,
+Jus Pamplemousse,11,18,12,
 Arizona Mucho Mango,7,6,6,611479
 Arizona Green Tea,8,6,6,609713
 Arizona Fruit Punch,16,6,6,611243
@@ -45,14 +46,14 @@ Canada dry,51,12,6,826746
 Monster Mango Loco,16,12,12,421904
 Monster Pipeline Punch,7,12,12,368789
 Monster Ultra Zero Sugar,11,12,12,296648
-Monster Ultra Paradise,33,12,12,267133
+Monster Ultra Paradise,32,12,12,267133
 Monster Energy,27,36,24,394647
 Monster Ultra Gold,14,12,12,815429
-Capri-Sun 20cl Multi Vitamin,36,40,10,778766
+Capri-Sun 20cl Multi Vitamin,35,40,10,778766
 Cacolac,19,12,24,599300
-Sprite,15,24,24,905216
-Jus Pamplemousse,12,18,12,892552
-Kinder Bueno$,90,150,30,070295
-Kinder Bueno White,76,100,30,961578
+Sprite,14,24,24,905216
+Jus Pamplemousse,11,18,12,892552
+Kinder Bueno$,87,150,30,070295
+Kinder Bueno White,75,100,30,961578
 Kinder Country,21,30,24,723788
 Oreo Pocket,18,20,5,896676

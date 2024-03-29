@@ -41,8 +41,8 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
         print("Le panier a été vidé")
     except:
         print("Le panier est déjà vide")
-    prix = []
-    produit_non_trouve = []
+    prix = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits par lots', 'Prix')]
+    produits_non_trouves = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits par lots', 'REF')]
     sleep(1)
     # Ajouts des produits
     def ajout_produit(row):
@@ -51,38 +51,42 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
         try:
             prix_produit = float(driver.find_element(By.XPATH, "//meta[@itemprop='price']").get_attribute("content").replace(',','.'))
         except:
-            print(f"Le produit {produits[row]} n'est pas disponible")
-            produit_non_trouve.append((produits[i], nb_de_lots_a_acheter, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
-            print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
+            print(f"Le produit {produits[row]} n'est pas était trouvé sur le drive, ajout dans le fichier Produits_non_trouves.csv")
+            produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits_par_lots[row], ref_produits_auchan[row]))
             print("Passage au produit suivant")
             return
-        prix.append((produits[row],nb_de_lots_a_acheter[row], nb_produits_par_lots[row], prix_produit))
+        prix.append((produits[row], nb_de_lots_a_acheter[row], nb_produits_par_lots[row], prix_produit))
         for i in range(int(nb_de_lots_a_acheter[row])):
             try:
                 driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
             except:
                 print(f"Le produit {produits[row]} est au max, il y a {i+1} / {nb_de_lots_a_acheter[row]} mis dans le panier")
-                prix[-1][2] = i + 1
-                produit_non_trouve.append((produits[i], nb_de_lots_a_acheter - i - 1, nb_produits[i], supposed_nb_produits[i], nb_produits_par_lots[i], ref_produits_auchan[row]))
-                print(f"{nb_de_lots_a_acheter - i - 1} {produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
+                prix[-1] = (produits[row], i + 1, nb_produits_par_lots[row], ref_produits_auchan[row])
+                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row] - i - 1, nb_produits_par_lots[row], ref_produits_auchan[row]))
+                print(f"{nb_de_lots_a_acheter - i - 1} {produits[row]} ajouté dans le fichier Produits_non_trouves.csv")
                 print("Passage au produit suivant")
                 break
             sleep(0.5)
+
     for row in range(len(produits)):
         try:
-            ajout_produit(row)
+            if ref_produits_auchan[row] != '':
+                ajout_produit(row)
+            else:
+                print(f"Le produit {produits[row]} n'est pas disponible sur le drive, ajout dans le fichier produits_non_trouves.csv")
+                produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits_par_lots[row], ref_produits_auchan[row]))
         except Exception as e:
             print(f"{produits[row]} n'as pas réussi à être ajouté à cause de l'erreur suivante : {e}")
-            produit_non_trouve.append((produits[row], nb_de_lots_a_acheter, nb_produits[row], supposed_nb_produits[row], nb_produits_par_lots[row], ref_produits_auchan[row]))
-            print(f"{produits[row]} ajouté dans le fichier Produit_non_trouve.csv")
+            produits_non_trouves.append((produits[row], nb_de_lots_a_acheter[row], nb_produits_par_lots[row], ref_produits_auchan[row]))
+            print(f"{produits[row]} ajouté dans le fichier Produits_non_trouves.csv")
             print("Passage au produit suivant")
         sleep(1)
     # Vérification du panier
     sleep(1)
     driver.get("https://www.auchan.fr/checkout/cart/")
     csv_writer('Prix.csv', prix)
-    if produit_non_trouve != []:
-        csv_writer('Produit_non_trouve.csv', produit_non_trouve)
+    if produits_non_trouves != []:
+        csv_writer('Produits_non_trouves.csv', produits_non_trouves)
 
 if __name__ == '__main__':
     load_dotenv()

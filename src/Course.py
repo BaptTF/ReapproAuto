@@ -10,8 +10,8 @@ def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_p
     ifls_produits_promocash = csv_reader(file, row_number=4)
     #produits = [(p,nb,s) for p,nb,s in zip(produits,nb_produits, supposed_nb_produits)]
 
-    course = []
-    course_non_drive = []
+    course = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits', 'Nombre de produits supposé', 'Nombre de produits par lots', 'REF')]
+    course_non_drive = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits', 'Nombre de produits supposé', 'Nombre de produits par lots', 'REF')]
     for i in range(len(produits)):
         if nb_produits[i] == 'Produit non trouvé': nb_produits[i] = 999999999
         nb_produits[i] = int(nb_produits[i])

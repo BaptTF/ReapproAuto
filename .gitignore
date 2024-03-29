@@ -8,7 +8,9 @@ Inventaire.csv
 Inventaire_modif.csv
 ProduitARecalculer.csv
 Course_non_drive.csv
-Produit_non_trouve.csv
+Produits_non_trouves.csv
+Update_optimal.csv
+Update_optimal_manquant.csv
 .env
 .vscode
 bar.categories.json

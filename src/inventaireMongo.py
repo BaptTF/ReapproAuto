@@ -20,7 +20,7 @@ def inventaire_mongo(client, file):
     nb_produits_par_lots = csv_reader(file, row_number=3)
     ifls_produits_promocash = csv_reader(file, row_number=4)
 
-    Inventaire = []
+    Inventaire = [('Produit', 'Quantité restante', 'Quantité optimale', 'Nombre de produits par lots', 'REF')]
 
     for i in range(len(produits)):
         query = { "name": { "$regex": produits[i], "$options" :'i'}, "deleted_at": None}

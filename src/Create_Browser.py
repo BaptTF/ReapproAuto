@@ -26,7 +26,7 @@ def create_browser(WEB_BROWSER):
     else:
         print("Le navigateur n'est pas reconnu, veuillez choisir entre chrome et firefox")
         exit()
-    driver.implicitly_wait(100)
+    driver.implicitly_wait(2)
     return driver
 
 if __name__ == '__main__':
