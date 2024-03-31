@@ -45,6 +45,7 @@ if magasin != 'r':
             promocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
             print("Commande faite sur Promocash et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
             print("Les produits non trouvés sont dans le fichier Produits_non_trouves.csv")
+            print_calcul_prix_total(magasin)
         else:
             exit()
     else:
@@ -53,6 +54,7 @@ if magasin != 'r':
             auchan(getenv("IDENTIFIANT_AUCHAN"), getenv("PASSWORD_AUCHAN"), getenv("WEB_BROWSER"))
             print("Commande faite sur Auchan et enregistré le fichier Prix.csv (nom_produit, nb_de_lots_acheter, nb_produits_par_lots, prix)")
             print("Les produits non trouvés sont dans le fichier Produits_non_trouves.csv")
+            print_calcul_prix_total(magasin)
         else:
             exit()
 
