@@ -1,12 +1,12 @@
-from csvReader import csv_reader
+from ReapproAuto.csvReader import csv_reader
 from pymongo import MongoClient
 from time import time
 from uuid import uuid4
 from os import getenv
 from dotenv import load_dotenv
 from bson.int64 import Int64
-from Recalcul_prix_centimes import recalcul_prix_centimes
-from PrintCalculPrixTotal import print_calcul_prix_total
+from ReapproAuto.Recalcul_prix_centimes import recalcul_prix_centimes
+from ReapproAuto.PrintCalculPrixTotal import print_calcul_prix_total
 
 def reappro_mongo(client, email, magasin):
     print("Attention, cette fonction est dangereuse, elle modifie la base de donnée du bar")

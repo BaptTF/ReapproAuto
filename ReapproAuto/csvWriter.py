@@ -1,11 +1,12 @@
 import csv
 from pathlib import Path
+import os
 
 def csv_writer(file, data):
     """
     Write data to a CSV file path
     """
-    with open(Path("csv") / file, "w", newline='') as csv_file:
+    with open(Path(f"{os.path.dirname(__file__)}/csv") / file, "w", newline='') as csv_file:
         writer = csv.writer(csv_file, delimiter=',', quotechar='|', quoting=csv.QUOTE_MINIMAL)
         for line in data:
             writer.writerow(line)

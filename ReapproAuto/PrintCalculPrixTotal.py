@@ -1,4 +1,4 @@
-from csvReader import csv_reader
+from ReapproAuto.csvReader import csv_reader
 
 def print_calcul_prix_total(magasin):
     try:

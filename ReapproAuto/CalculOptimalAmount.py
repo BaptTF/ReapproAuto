@@ -2,8 +2,8 @@ from pymongo import MongoClient
 from datetime import datetime, timedelta
 from datetime import timezone as tz
 from dotenv import load_dotenv
-from csvReader import csv_reader
-from csvWriter import csv_writer
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.csvWriter import csv_writer
 from os import getenv
 from bson.int64 import Int64
 import math

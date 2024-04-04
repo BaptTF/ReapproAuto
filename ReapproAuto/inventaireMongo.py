@@ -1,6 +1,6 @@
 from pymongo import MongoClient
-from csvReader import csv_reader
-from csvWriter import csv_writer
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.csvWriter import csv_writer
 from os import getenv
 from dotenv import load_dotenv
 

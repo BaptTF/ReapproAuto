@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 from datetime import timezone as tz
 from dotenv import load_dotenv
-from csvReader import csv_reader
+from ReapproAuto.csvReader import csv_reader
 from os import getenv
 from bson.int64 import Int64
 from bson.objectid import ObjectId

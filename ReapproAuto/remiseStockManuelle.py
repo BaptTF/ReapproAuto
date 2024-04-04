@@ -1,5 +1,5 @@
-from csvReader import csv_reader
-from csvWriter import csv_writer
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.csvWriter import csv_writer
 
 def stock_max():
     produits = csv_reader('Course_manuelle_stock_max.csv', row_number=0)

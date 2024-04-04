@@ -4,6 +4,13 @@
 Avoir soit Firefox soit Google Chrome si possible installé avec apt parce que ça ne fonctionne pas installé avec snap (quel surprise)
 https://doc.ubuntu-fr.org/firefox#installer_firefox_en_deb_classique_au_lieu_de_snap
 ```bash
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps ReapproAuto==0.0.4
+```
+```bash
+reappro
+```
+
+```bash
 sudo apt install -y python3-venv
 ```
 ```bash

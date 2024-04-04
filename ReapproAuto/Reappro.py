@@ -6,8 +6,8 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.select import Select
 from getpass import getpass
 from time import sleep
-from csvReader import csv_reader
-from Create_Browser import create_browser
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.Create_Browser import create_browser
 from dotenv import load_dotenv
 from os import getenv
 

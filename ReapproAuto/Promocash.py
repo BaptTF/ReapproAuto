@@ -3,9 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from csvReader import csv_reader
-from csvWriter import csv_writer
-from Create_Browser import create_browser
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.csvWriter import csv_writer
+from ReapproAuto.Create_Browser import create_browser
 from time import sleep
 from dotenv import load_dotenv
 from os import getenv

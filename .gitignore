@@ -15,3 +15,8 @@ Update_optimal_manquant.csv
 .vscode
 bar.categories.json
 bar.items.json
+ReapproAuto.egg-info
+dist
+build
+test
+old

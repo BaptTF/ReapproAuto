@@ -1,5 +1,5 @@
-from csvReader import csv_reader
-from csvWriter import csv_writer
+from ReapproAuto.csvReader import csv_reader
+from ReapproAuto.csvWriter import csv_writer
 
 # Récupération des produits et de le nombre
 def creation_de_la_liste_de_course(seuil_pour_acheter_pourcentage_du_nombre_de_produits_par_lots, file, diff=False):
