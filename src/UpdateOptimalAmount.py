@@ -18,6 +18,7 @@ def update_optimal_amount(client, file, security=True):
     amount_sold = csv_reader(file, row_number=2)
     optimal_amount = csv_reader(file, row_number=3)
     old_optimal_amount = csv_reader(file, row_number=4)
+    print("La sécurité est désactivée, vous êtes sûr de ce que vous faites" if security == False else "La sécurité est activée, vous pouvez annuler à tout moment")
     for row in range(len(id)):
         if not security:
             ans = input(f"Voulez vous modifier le montant optimal du produit {produits[row]} de {old_optimal_amount[row]} pour {optimal_amount[row]} (nb_produit_vendu: {amount_sold[row]})? (y/n/exit) ")

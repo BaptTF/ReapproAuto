@@ -20,8 +20,8 @@ load_dotenv(override=True)
 # 1 ERE ETAPE: FAIRE L'INVENTAIRE
 # Create a MongoClient object and specify the connection URL
 client = MongoClient(f"mongodb://bar:{getenv('MONGO_MDP')}@mongo.telecomnancy.net:443/?authMechanism=DEFAULT&authSource=bar&directConnection=true&tls=true&tlsCertificateKeyFile={getenv('MONGO_PEM')}")
-magasin = input("Course pour Promocash ou pour Auchan ou passez à l'étape de la réappro si vous avez déjà fait vos courses (p/a/r) ?")
-if magasin != 'r':
+magasin = input("Course pour Promocash ou pour Auchan ou passez à l'étape de la réappro si vous avez déjà fait vos courses (p/a/r/u) ?")
+if magasin == 'p' or magasin == 'a':
     file = "Inventaire_Promocash.csv" if magasin == 'p' else "Inventaire_Auchan.csv"
     last_row = "ifls_produits_promocash" if magasin == 'p' else "ref_produits_auchan"
     if magasin == 'p':

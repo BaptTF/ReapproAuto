@@ -31,15 +31,14 @@ def calcul_optimal_amount(client, magasin, days=21, security=True):
     else:
         print("Magasin inconnu")
         exit()
-
-    print("La sécurité est désactivée, vous êtes sûr de ce que vous faites" if security == False else "La sécurité est activée, vous pouvez annuler à tout moment")
     update_optimal_amount = [('id', 'name', 'amount_sold', 'new_optimal_amount', 'old_optimal_amount')]
     update_optimal_manquant = [('id', 'name', 'amount_left', 'optimal_amount', 'optimal_amount')]
+    print("La sécurité est désactivée, vous êtes sûr de ce que vous faites" if security == False else "La sécurité est activée, vous pouvez annuler à tout moment")
     for i in range(len(produits)):
         query = { "name": { "$regex": produits[i], "$options" :'i'}, "deleted_at": None}
         produit = collection_items.find_one(query)
         if produit["name"] in week_quantities.keys() and produit["amount_left"] != 0:
-            new_optimal_amount = Int64(arrondi_au_mutilple(week_quantities[produit["name"]], int(nb_produits_par_lots[i])))
+            new_optimal_amount = Int64(arrondi_au_mutilple(week_quantities[produit["name"]], int(nb_produits_par_lots[i]) // 2))
             if new_optimal_amount != produit["optimal_amount"]:
                 update_optimal_amount.append((produit["_id"], produit["name"], week_quantities[produit["name"]], new_optimal_amount, produit["optimal_amount"]))
                 if not security:
