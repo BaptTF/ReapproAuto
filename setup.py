@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='ReapproAuto',
-    version='0.0.4',
+    version='0.0.6',
     packages=find_packages(),
     url="https://github.com/BaptTF/ReapproAuto",
     author="Baptiste JULLIEN",
@@ -45,8 +45,8 @@ setup(
         'sortedcontainers==2.4.0',
         'trio==0.24.0',
         'trio-websocket==0.11.1',
-        'urllib3==2.1.0',
+        'urllib3<=2.1.0',
         'wsproto==1.2.0',
     ],
-    package_data={'ReapproAuto': ['csv/Inventaire_Auchan.csv', 'csv/Inventaire_Promocash.csv']},
+    package_data={'ReapproAuto': ['csv/Inventaire_Auchan.csv', 'csv/Inventaire_Promocash.csv', 'csv/Course_manuelle.csv', 'csv/Course_manuelle_stock_max.csv']},
 )
