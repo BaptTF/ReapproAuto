@@ -3,11 +3,11 @@ from csvWriter import csv_writer
 
 def calcul_ttc_prix_promocash():
 
-    produits = csv_reader(file='Prix_test.csv', row_number=0)
-    nb_de_lots_acheter = csv_reader(file='Prix_test.csv', row_number=1)
-    nb_produits_par_lots = csv_reader(file='Prix_test.csv', row_number=2)
-    prix = csv_reader(file='Prix_test.csv', row_number=3)
-    ref = csv_reader(file='Prix_test.csv', row_number=4)
+    produits = csv_reader(file='Prix_test_promocash.csv', row_number=0)
+    nb_de_lots_acheter = csv_reader(file='Prix_test_promocash.csv', row_number=1)
+    nb_produits_par_lots = csv_reader(file='Prix_test_promocash.csv', row_number=2)
+    prix = csv_reader(file='Prix_test_promocash.csv', row_number=3)
+    ref = csv_reader(file='Prix_test_promocash.csv', row_number=4)
 
     sum_ttc = 0
     sum_ht = 0
@@ -21,11 +21,9 @@ def calcul_ttc_prix_promocash():
         sum_ttc += prix_ttc
         prix_ttc_test.append((produits[row], nb_de_lots_acheter[row], nb_produits_par_lots[row], round(prix_ttc, 2), ref[row]))
     
-    prix_ttc_test.append(("Total HT", sum_ht))
-    prix_ttc_test.append(("Total TTC", sum_ttc))
-    print(sum_ht)
-    print(round(sum_ttc, 2))
-    print(f"Total HT : {round(sum([float(prix[i]) * int(nb_de_lots_acheter[i]) for i in range(len(produits))]),2):.2f}")
+    prix_ttc_test.append(("Total HT", round(sum_ht,2)))
+    prix_ttc_test.append(("Total TTC", round(sum_ttc,2)))
+    print(f"Total TTC : {round(sum_ttc, 2)}")
     csv_writer('Prix_ttc_test.csv', prix_ttc_test)
 
 if __name__ == '__main__':

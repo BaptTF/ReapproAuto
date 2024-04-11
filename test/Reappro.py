@@ -67,6 +67,14 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
         driver.find_element(By.XPATH, f"//td[{input_price}]/div/input").send_keys(prix[row])
         driver.find_element(By.XPATH, "//button[contains(.,'Ajouter')]").click()
 
+    if magasin == "p":
+        fournisseur = driver.find_element(By.XPATH, "//div/div[1]/div/div[1]/select")
+        select = Select(fournisseur)
+        select.select_by_index(0)
+    elif magasin == "a":
+        fournisseur = driver.find_element(By.XPATH, "//div/div[1]/div/div[1]/select")
+        select = Select(fournisseur)
+        select.select_by_index(1)
     for row in range(len(produits)):
         ajout_produit(row)
         sleep(0.2)
