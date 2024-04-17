@@ -60,8 +60,13 @@ def auchan(IDENTIFIANT_AUCHAN, PASSWORD_AUCHAN, WEB_BROWSER):
             try:
                 driver.find_element(By.XPATH, "//button[contains(.,'Ajouter au panier')]").click()
             except:
-                print(f"Le produit {produits[row]} est au max, il y a {i} / {nb_de_lots_a_acheter[row]} mis dans le panier")
-                prix[-1] = (produits[row], i, nb_produits_par_lots[row], ref_produits_auchan[row])
+                if i == 0:
+                    print(f"Le produit {produits[row]} n'est pas disponible actuellement dans le drive")
+                    prix.pop()
+                else:
+                    print(f"Le produit {produits[row]} est au max, il y a {i} / {nb_de_lots_a_acheter[row]} mis dans le panier")
+                    prix[-1] = (produits[row], i, nb_produits_par_lots[row], ref_produits_auchan[row])
+                
                 produits_non_trouves.append((produits[row], int(nb_de_lots_a_acheter[row]) - i, nb_produits_par_lots[row], ref_produits_auchan[row]))
                 print(f"{int(nb_de_lots_a_acheter[row]) - i} {produits[row]} ajouté dans le fichier Produits_non_trouves.csv")
                 print("Passage au produit suivant")

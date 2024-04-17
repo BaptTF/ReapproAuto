@@ -115,13 +115,15 @@ def get_amount_paid_per_person():
 
 def show_get_amount_paid_per_person():
     amount_paid_per_person = get_amount_paid_per_person()
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(20, 10))
     plt.bar(amount_paid_per_person.keys(), [i/100 for i in amount_paid_per_person.values()])
+    plt.xticks(range(len(amount_paid_per_person.keys())), amount_paid_per_person.keys(), rotation="vertical")
     plt.xlabel('Person')
     plt.ylabel('Amount paid')
     plt.title('Amount paid per person')
     plt.grid(True)
     plt.tight_layout()
+    plt.xlim(-0.5,len(amount_paid_per_person.keys())-.5)
     plt.show()
     client.close()
 
@@ -286,8 +288,9 @@ def show_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours
 
 if __name__ == "__main__":
     nom_produit_liste = ['Coca Cola', 'Coca Cola Zero','Coca Cherry', 'Oasis PCF', "Monster Energy", "Lipton Peche", "Oasis Tropical", "Kinder Bueno", "Orangina"]
-    show_get_quantity_sold(nom_produit_liste)
-    #show_get_amount_paid_per_person()
+    #nom_produit_test = ["Jus Raisin"]
+    #show_get_quantity_sold(nom_produit_liste)
+    show_get_amount_paid_per_person()
     #show_get_amount_paid_for_one_person("Aristide URLI")
     #show_get_amount_of_product_sold_for_last_2_week()
     #show_get_amount_of_product_sold_for_last_2_week_per_category("Viennoiseries")

@@ -36,7 +36,7 @@ def reappro(EMAIL, PASSWORD, WEB_BROWSER, magasin):
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.NAME, "Passwd"))).send_keys(PASSWORD)
     #driver.find_element(By.NAME, "Passwd").send_keys(PASSWORD)
     driver.find_element(By.ID, "passwordNext").click()
-    driver.find_element(By.ID, "submit_approve_access").click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "submit_approve_access"))).click()   
     sleep(5)
     # Aller sur la page des Réapprovisionnements
     driver.get("http://localhost:5173/panel/products/reappro")
