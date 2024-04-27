@@ -11,6 +11,7 @@ from ReapproAuto.PrintCalculPrixTotal import print_calcul_prix_total
 from ReapproAuto.CalculOptimalAmount import calcul_optimal_amount
 from ReapproAuto.UpdateOptimalAmount import update_optimal_amount
 from ReapproAuto.Install import install
+from ReapproAuto.CourseApi import course
 from pymongo import MongoClient
 from os import getenv
 from dotenv import load_dotenv
@@ -41,7 +42,10 @@ def main():
             creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
         print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
         print(f"Course non drive calculer dans le fichier Course_non_drive.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots)")
-
+        # if magasin == "p":
+        #     course(getenv("card_id"), getenv("card_pin"), "promocash")
+        # else:
+        #     course(getenv("card_id"), getenv("card_pin"), "auchan")
         if magasin == 'p':
             # 3 EME ETAPE: ALLER SUR PROMOCASH
             if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':
