@@ -4,13 +4,13 @@ from ReapproAuto.csvWriter import csv_writer
 
 def course(card_id: str, card_pin: str, fournisseur: str):
     # Make the POST request to /auth/card
-    url = 'http://bar.telecomnancy.net/auth/card'
+    url = 'https://bar.telecomnancy.net/auth/card'
     headers = {'X-Local-Token': 'jesuisleplusfort', 'Content-Type': 'application/json'}
     data = {'card_id': card_id, 'card_pin': card_pin}
     response = requests.post(url, headers=headers, data=json.dumps(data))
 
     # Make the GET request to /course
-    url = 'http://bar.telecomnancy.net/course'
+    url = 'https://bar.telecomnancy.net/course'
     params = {'fournisseur': fournisseur}
     response = requests.get(url, cookies=response.cookies.get_dict(), params=params)
 

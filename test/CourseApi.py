@@ -18,13 +18,13 @@ def Course(card_id: str, card_pin: str, fournisseur: str):
     if response.status_code != 200:
         print("Mauvais Code PIN ou Card ID")
     else:
-        CourseTab = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits', 'Nombre de produits supposé', 'Nombre de produits par lots', 'REF')]
+        CourseTab = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits', 'Nombre de produits supposé', 'Nombre de produits par lots', 'REF', 'ID du produit', 'TVA')]
         CourseNonDrive = [('Produit', 'Nombre de lots à acheter', 'Nombre de produits', 'Nombre de produits supposé', 'Nombre de produits par lots')]
         course = response.json()
         for row in course["items"]:
             item = row["item"]
             if "ref_bundle" in item:
-                CourseTab.append(("^" + item["name"] + "$", row["amountToBuy"], item["amount_left"], item["optimal_amount"], item["amount_per_bundle"], item["ref_bundle"]))
+                CourseTab.append(("^" + item["name"] + "$", row["amountToBuy"], item["amount_left"], item["optimal_amount"], item["amount_per_bundle"], item["ref_bundle"], item["id"], item["last_tva"]))
             else:
                 CourseNonDrive.append((item["name"], row["amountToBuy"], item["amount_left"], item["optimal_amount"], item["amount_per_bundle"]))
     csv_writer("Course.csv", CourseTab)
