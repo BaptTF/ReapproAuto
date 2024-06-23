@@ -11,7 +11,8 @@ from ReapproAuto.PrintCalculPrixTotal import print_calcul_prix_total
 from ReapproAuto.CalculOptimalAmount import calcul_optimal_amount
 from ReapproAuto.UpdateOptimalAmount import update_optimal_amount
 from ReapproAuto.Install import install
-from ReapproAuto.CourseApi import course
+from ReapproAuto.CourseApi import Course
+from ReapproAuto.ReapproApi import reapproApi
 from pymongo import MongoClient
 from os import getenv
 from dotenv import load_dotenv
@@ -23,29 +24,34 @@ def main():
 
     # 1 ERE ETAPE: FAIRE L'INVENTAIRE
     # Create a MongoClient object and specify the connection URL
-    client = MongoClient(f"mongodb://bar:{getenv('MONGO_MDP')}@mongo.telecomnancy.net:443/?authMechanism=DEFAULT&authSource=bar&directConnection=true&tls=true&tlsCertificateKeyFile={getenv('MONGO_PEM')}")
     magasin = input("Course pour Promocash ou pour Auchan ou passez à l'étape de la réappro si vous avez déjà fait vos courses (p/a/r/u) ?")
     if magasin == 'p' or magasin == 'a':
-        file = "Inventaire_Promocash.csv" if magasin == 'p' else "Inventaire_Auchan.csv"
-        last_row = "ifls_produits_promocash" if magasin == 'p' else "ref_produits_auchan"
-        if magasin == 'p':
-            inventaire_mongo(client, file)
-        else:
-            inventaire_mongo(client, file)
+        ans = input("Voulez vous faire les courses via la BD ou l'API (bd/api) ?")
+        if ans == "bd":
+            client = MongoClient(f"mongodb://bar:{getenv('MONGO_MDP')}@mongo.telecomnancy.net:443/?authMechanism=DEFAULT&authSource=bar&directConnection=true&tls=true&tlsCertificateKeyFile={getenv('MONGO_PEM')}")
+            file = "Inventaire_Promocash.csv" if magasin == 'p' else "Inventaire_Auchan.csv"
+            last_row = "ifls_produits_promocash" if magasin == 'p' else "ref_produits_auchan"
+            if magasin == 'p':
+                inventaire_mongo(client, file)
+            else:
+                inventaire_mongo(client, file)
 
-        print(f"Inventaire fait dans le fichier {file} (nom_produit, amount_left, optimal_amount, nb_produits_par_lots, {last_row}")
+            # Close the connection when you're done
+            client.close()
+            print(f"Inventaire fait dans le fichier {file} (nom_produit, amount_left, optimal_amount, nb_produits_par_lots, {last_row}")
 
-        # 2 EME ETAPE: CALCULER LES COURSES A FAIRE
-        if magasin == 'p':
-            creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
+            # 2 EME ETAPE: CALCULER LES COURSES A FAIRE
+            if magasin == 'p':
+                creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
+            else:
+                creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
+            print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
+            print(f"Course non drive calculer dans le fichier Course_non_drive.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots)")
         else:
-            creation_de_la_liste_de_course(float(getenv("SEUIL_COURSE")), file)
-        print(f"Course calculer dans le fichier Course.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots, {last_row})")
-        print(f"Course non drive calculer dans le fichier Course_non_drive.csv (nom_produit, nb_de_lots_a_acheter, amount_left, optimal_amount, nb_produits_par_lots)")
-        # if magasin == "p":
-        #     course(getenv("card_id"), getenv("card_pin"), "promocash")
-        # else:
-        #     course(getenv("card_id"), getenv("card_pin"), "auchan")
+            if magasin == "p":
+                Course(getenv("CARD_ID"), getenv("CARD_PIN"), "promocash")
+            else:
+                Course(getenv("CARD_ID"), getenv("CARD_PIN"), "auchan")
         if magasin == 'p':
             # 3 EME ETAPE: ALLER SUR PROMOCASH
             if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':
@@ -80,7 +86,7 @@ def main():
             if input("Voulez-vous mettre à jour les prix sur Promocash (y/n) ?") == 'y':
                 updatePricePromocash(getenv("NUMERO_CARTE_PROMOCASH"), getenv("PASSWORD_PROMOCASH"), getenv("WEB_BROWSER"))
                 print("Les prix ont été mis à jour dans le fichier Prix.csv")
-        ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/bd)" )
+        ans = input("Voulez-vous utiliser la reappro via la base de données directement ou par le site du bar ? (bar/api)" )
         if ans == "bar":
             if input("Etes-vous sûre de vouloir faire la reappro avec le site du bar? (y/n)") == 'y':
                 # Get the password for the Google account
@@ -89,15 +95,17 @@ def main():
                 print("Reappro fait sur le site du bar")
             else:
                 exit()
-        elif ans == "bd":
+        elif ans == "api":
             # Ici le choix de promocash / auchan décide si on fait calcul la tva pour les prix ou non en fonction de last_tva
-            print("Cette fonctionnalité est expérimentale et peut corrompre la base de données, veuillez vérifier les données avant de continuer")
-            if input("Etes-vous sûre de vouloir faire la reappro via la base données directement (y/n) ?") == 'y':
-                reappro_mongo(client, getenv("EMAIL"), magasin)
+            print("Cette fonctionnalité est expérimentale, veuillez vérifier les données avant de continuer")
+            if input("Etes-vous sûre de vouloir faire la reappro via l'API(y/n) ?") == 'y':
+                reapproApi(getenv("CARD_ID"), getenv("CARD_PIN"), magasin)
+                # reappro_mongo(client, getenv("EMAIL"), magasin)
                 print("Reappro fait via la base de données directement")
             else:
                 exit()
     elif magasin == 'u':
+        client = MongoClient(f"mongodb://bar:{getenv('MONGO_MDP')}@mongo.telecomnancy.net:443/?authMechanism=DEFAULT&authSource=bar&directConnection=true&tls=true&tlsCertificateKeyFile={getenv('MONGO_PEM')}")
         # 5 EME ETAPE: CALCULER LE NOMBRE OPTIMAL DE PRODUITS
         magasin = input("Voulez-vous calculer le nombre optimal de produits pour Promocash ou pour Auchan (p/a) ?")
         if magasin == 'p':
@@ -111,15 +119,14 @@ def main():
         magasin = input("Voulez-vous mettre à jour le nombre optimal de produits (y/n) ?")
         if magasin == 'y':
             update_optimal_amount(client, "Update_optimal.csv", security=False)
+            # Close the connection when you're done
+            client.close()
         elif magasin == 'n':
             print("Le nombre optimal de produits n'a pas été mis à jour")
         else:
             print("Commande inconnue, Le nombre optimal de produits n'a pas été mis à jour")
     else:
         print("Commande inconnue")
-
-        # Close the connection when you're done
-    client.close()
 
 if __name__ == '__main__':
     main()
