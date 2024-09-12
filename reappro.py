@@ -1,4 +1,4 @@
-from ReapproAuto.__main__ import start
+from ReapproAuto.ReapproComplete import main
 
 if __name__ == '__main__':
-    start()
+    main()

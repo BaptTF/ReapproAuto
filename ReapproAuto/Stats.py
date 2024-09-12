@@ -110,7 +110,8 @@ def get_amount_paid_per_person():
         if transaction["state"] == "finished":
             amount_paid = transaction["total_cost"]
             person = transaction["account_name"]
-            amount_paid_per_person[person] += amount_paid
+            if amount_paid < 10000:
+                amount_paid_per_person[person] += amount_paid
     return amount_paid_per_person
 
 def show_get_amount_paid_per_person():
@@ -284,6 +285,20 @@ def show_the_time_of_last_transaction_for_each_day_per_product(produit, nb_jours
     plt.show()
     client.close()
 
+def get_amount_of_drinks_for_last_year(list_of_item):
+    transactions = collection.find()
+    dictio = {}
+    for transaction in transactions:
+        if transaction["total_cost"] > 0:
+            for item in transaction["items"]:
+                for item_search in list_of_item:
+                    if item_search in item["item_name"]:
+                        if item["item_name"] in dictio:
+                            dictio[item["item_name"]] += item["item_amount"]
+                        else:
+                            dictio[item["item_name"]] = item["item_amount"]
+    return dictio
+
 
 
 if __name__ == "__main__":
@@ -292,9 +307,10 @@ if __name__ == "__main__":
     #show_get_quantity_sold(nom_produit_liste)
     #show_get_amount_paid_per_person()
     #show_get_amount_paid_for_one_person("Aristide URLI")
-    show_get_amount_of_product_sold_for_last_2_week()
+    #show_get_amount_of_product_sold_for_last_2_week()
     #show_get_amount_of_product_sold_for_last_2_week_per_category("Viennoiseries")
     #show_get_amount_of_product_sold_for_last_2_week_per_inventory("Inventaire_Promocash.csv")
     #show_the_time_of_last_transaction_for_each_day_per_product("Pain au Chocolat(ine)", 30)
+    #print(get_amount_of_drinks_for_last_year(["Monster"]))
 
 #print(somme)
