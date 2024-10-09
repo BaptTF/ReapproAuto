@@ -51,7 +51,7 @@ def main():
             if magasin == "p":
                 Course(getenv("CARD_ID"), getenv("CARD_PIN"), "promocash")
             else:
-                Course(getenv("CARD_ID"), getenv("CARD_PIN"), "auchan")
+                Course(getenv("CARD_ID"), getenv("CARD_PIN"), "auchan_drive")
         if magasin == 'p':
             # 3 EME ETAPE: ALLER SUR PROMOCASH
             if input("Voulez-vous commander sur Promocash (y/n) ?") == 'y':

@@ -1,3 +1,4 @@
+.venv
 venv
 config.py
 Course*.csv
@@ -6,6 +7,7 @@ Prix*.csv
 ProduitACacher.csv
 Inventaire.csv
 Inventaire_modif.csv
+Inventaire_Auchan.csv
 ProduitARecalculer.csv
 Course_non_drive.csv
 Produits_non_trouves.csv
